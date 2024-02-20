@@ -4,7 +4,8 @@ import classNames from "classnames";
 import { useState } from "react";
 import LogoIcon from "./icons/LogoIcon";
 import { CollapsIcon } from "./icons/ColapsIcon";
-import { faGlobe } from "@fortawesome/free-solid-svg-icons";
+import { faGlobe, faList, faArrowsSpin, faBoxesPacking, faDollarSign, faCircleDollarToSlot, faHandHoldingDollar, faSunPlantWilt } from "@fortawesome/free-solid-svg-icons";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 
@@ -17,13 +18,13 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   { id: 1, label: "Lotes", icon: faGlobe, link: "/lots" },
-  { id: 2, label: "Insumos", icon: faGlobe, link: "/supplies" },
-  { id: 3, label: "Rotacion", icon: faGlobe, link: "/rotations" },
-  { id: 4, label: "Labores", icon: faGlobe, link: "/labors" },
-  { id: 5, label: "P.Insumos", icon: faGlobe, link: "/priceSupplies" },
-  { id: 6, label: "Costos", icon: faGlobe, link: "/costs" },
-  { id: 7, label: "P. x Grano", icon: faGlobe, link: "/priceGrains" },
-  { id: 8, label: "Produccion", icon: faGlobe, link: "/productions" },
+  { id: 2, label: "Insumos", icon: faBoxesPacking, link: "/supplies" },
+  { id: 3, label: "Rotacion", icon: faArrowsSpin, link: "/rotations" },
+  { id: 4, label: "Labores", icon: faList, link: "/labors" },
+  { id: 5, label: "P.Insumos", icon: faDollarSign, link: "/priceSupplies" },
+  { id: 6, label: "Costos", icon: faCircleDollarToSlot, link: "/costs" },
+  { id: 7, label: "P. x Grano", icon: faHandHoldingDollar, link: "/priceGrains" },
+  { id: 8, label: "Produccion", icon: faSunPlantWilt, link: "/productions" },
 ];
 
 export default function Sidebar() {
