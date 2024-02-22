@@ -1,11 +1,10 @@
 import Layout from "../components/Layout";
-import Lots from "./LotsBody";
 
-export default function Lot() {
+export default function Dashboard() {
   return (
     <>
       <Layout>
-        <Lots/>
+        <div>Dashboard</div>
       </Layout>
     </>
   );
