@@ -5,6 +5,17 @@ import { addOk } from "../components/alerts/sweet";
 import { useState } from "react";
 import SearchInput from "./SearchInput";
 
+
+type Lot = {
+  businessName: string;
+  establishment: string;
+  lot: string;
+  surface: number;
+  latitude: number;
+  length: number;
+  condition: string;
+};
+
 export default function Lots() {
   // hooks states
   const [businessName, setBusinessName] = useState("");
@@ -14,18 +25,6 @@ export default function Lots() {
   const [latitude, setLatitude] = useState(0);
   const [length, setLength] = useState(0);
   const [condition, setCondition] = useState("");
-
-  type Lot = {
-    businessName: string;
-    establishment: string;
-    lot: string;
-    surface: number;
-    latitude: number;
-    length: number;
-    condition: string;
-  };
-
-
 
   // handlers
   const handleSetBusinessName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +58,7 @@ export default function Lots() {
   const handleSaveLot = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const lotObject:Lot = {
+    const lotObject: Lot = {
       businessName,
       establishment,
       lot,
@@ -93,71 +92,75 @@ export default function Lots() {
   // useEffect(() => {}, [handleSaveLot]);
 
 
-  
 
 
 
-  
+
+
 
   return (
     <>
-      <div className="grid grid-cols-4 gap-4 mt-10">
-        <input
-          type="text"
-          className="border p-2 rounded-md"
-          placeholder="Razon Social"
-          onChange={handleSetBusinessName}
-        />
+      <div className='space-y-4 px-6'>
+        <div className="card grid grid-cols-4 gap-4 mt-10">
+          <input
+            type="text"
+            className="input"
+            placeholder="Razon Social"
+            onChange={handleSetBusinessName}
+          />
 
-        <input
-          type="text"
-          className="border p-2 rounded-md"
-          placeholder="Establecimiento"
-          onChange={handleSetStablishment}
-        />
-        <input
-          type="text"
-          className="border p-2 rounded-md"
-          placeholder="Lote"
-          onChange={handleSetLot}
-        />
+          <input
+            type="text"
+            className="input"
+            placeholder="Establecimiento"
+            onChange={handleSetStablishment}
+          />
+          <input
+            type="text"
+            className="input"
+            placeholder="Lote"
+            onChange={handleSetLot}
+          />
 
-        <input
-          type="number"
-          className="border p-2 rounded-md"
-          placeholder="Supercie"
-          onChange={handleSetSurface}
-        />
-        <input
-          type="number"
-          className="border p-2 rounded-md"
-          placeholder="Latitud"
-          onChange={handleSetLatitude}
-        />
-        <input
-          type="number"
-          className="border p-2 rounded-md"
-          placeholder="Longitud"
-          onChange={handleSetLength}
-        />
+          <input
+            type="number"
+            min={0}
+            max={10000000}
+            className="input"
+            placeholder="Supercie"
+            onChange={handleSetSurface}
+          />
+          <input
+            type="number"
+            className="input"
+            placeholder="Latitud"
+            onChange={handleSetLatitude}
+          />
+          <input
+            type="number"
+            className="input"
+            placeholder="Longitud"
+            onChange={handleSetLength}
+          />
 
-        <input
-          type="text"
-          className="border p-2 rounded-md"
-          placeholder="Condicion"
-          onChange={handleSetCondition}
-        />
+          <input
+            type="text"
+            className="input"
+            placeholder="Condicion"
+            onChange={handleSetCondition}
+          />
 
-        <button
-          className="border rounded-md hover:bg-gray-300 p-2"
-          onClick={handleSaveLot}
-        >
-          Agregar
-        </button>
-      </div>
-      <div>
-        <SearchInput/>
+          <button
+            className="primary_btn btn_black max-w-max"
+            onClick={handleSaveLot}
+          >
+            <p className='w-28'>
+              Agregar
+            </p>
+          </button>
+        </div>
 
+        <SearchInput />
       </div>
     </>
   );
