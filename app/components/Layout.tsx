@@ -7,11 +7,14 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="h-screen flex flex-row justify-start">
+    <div className="flex flex-row overflow-hidden h-screen">
+
       <Sidebar />
-      <div className="bg-emerald-200 flex-1 p-4 text-black">
+
+      <div className="w-full bg-slate-50 h-full overflow-auto">
         {children}
       </div>
+
     </div>
   );
 };

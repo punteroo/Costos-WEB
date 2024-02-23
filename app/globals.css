@@ -2,31 +2,237 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+* {
+  @apply text-slate-900 outline-orange-600/50;
+  -webkit-tap-highlight-color:transparent;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+::selection {
+  background:rgba(170, 198, 255, 0.377);
 }
 
-body {
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+/* Tailwind Styles */
+.app {
+  @apply flex justify-center items-center flex-col max-w-7xl mx-auto sm:px-16 px-6;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.body {
+  @apply bg-slate-50 font-satoshi min-h-screen w-full flex flex-col text-sm md:text-base;
+}
+
+/* Layout */
+.page_layout {
+  @apply w-full max-w-6xl mx-auto px-2 md:px-12 my-8 md:my-20;
+}
+
+.flex-center {
+  @apply flex justify-center items-center;
+}
+
+.flex-start {
+  @apply flex justify-start items-start;
+}
+
+.flex-end {
+  @apply flex justify-end items-center;
+}
+
+.flex-between {
+  @apply flex justify-between items-center;
+}
+
+.divider {
+  @apply m-10 border-[0.5px] border-gray-200;
+}
+
+.card {
+  @apply p-4 md:p-6 rounded-xl border bg-white md:shadow-lg shadow-slate-950/5;
+}
+
+.input {
+  @apply p-3 rounded-lg border focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50;
+}
+
+.file_input {
+  @apply block w-full max-w-md text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200 file:disabled:text-slate-500 file:disabled:bg-slate-100 focus:outline-none;
+}
+
+.search_input {
+  @apply px-3 py-2 border-b outline-none focus:ring-slate-600 w-full max-w-lg transition-all;
+}
+
+.remove_file_btn {
+  @apply top-0 right-0 py-2 px-4 bg-red-100 cursor-pointer disabled:cursor-pointer hover:bg-red-200 rounded-full z-10 flex gap-2 items-center w-max disabled:bg-slate-100;
+}
+
+.remove_file_btn p {
+  @apply text-red-500 font-semibold text-sm;
+}
+
+.primary_btn {
+  @apply transition-all flex-center gap-2 px-5 rounded-lg h-full w-full disabled:opacity-50;
+}
+
+.primary_btn p {
+  @apply text-white font-medium;
+}
+
+.rounded_btn {
+  @apply rounded-full bg-gray-200 hover:bg-gray-200/50 transition-all py-2 px-4 flex items-center gap-1;
+}
+.rounded_btn p {
+  @apply text-slate-500 font-semibold text-sm;
+}
+
+.btn_orange {
+  @apply bg-orange-500 active:bg-orange-600 md:hover:bg-orange-600;
+}
+
+.btn_violet {
+  @apply bg-violet-500 active:bg-violet-600 md:hover:bg-violet-600;
+}
+
+.btn_red {
+  @apply bg-red-500 active:bg-red-600 md:hover:bg-red-600;
+}
+
+.btn_slate {
+  @apply bg-slate-200 active:bg-slate-300 md:hover:bg-slate-300;
+}
+.btn_black {
+  @apply bg-slate-900 active:bg-slate-800 md:hover:bg-slate-800;
+}
+
+.tiny_btn {
+  @apply opacity-50 hover:opacity-100 focus:opacity-100 transition-all cursor-pointer w-5 h-5 fill-slate-900;
+}
+
+.dashed_btn {
+  @apply flex gap-1 cursor-pointer hover:bg-orange-50 transition-all rounded-md items-center justify-center h-12 md:h-16 outline-dashed outline-1 outline-orange-300 mx-auto w-[99.8%] mt-6;
+}
+.dashed_btn > p {
+  @apply font-semibold uppercase text-xs md:text-sm text-orange-500;
+}
+
+/* Menu */
+.profile_picture {
+  @apply bg-slate-200 w-8 h-8 relative rounded-full overflow-hidden active:ring-4 md:hover:ring-4 ring-slate-300 transition-all cursor-pointer select-none;
+}
+.mobile_item {
+  @apply flex items-center gap-1.5 md:gap-2 px-1.5 py-2 rounded-lg font-medium text-sm cursor-pointer select-none md:hover:bg-slate-200/40 transition-all;
+}
+.nav_item {
+  @apply font-medium cursor-pointer px-4 py-2 hover:bg-slate-100 rounded-lg;
+}
+
+/* Table */
+table {
+  @apply mt-4;
+}
+table>thead {
+  @apply h-8;
+}
+table>thead>tr>th {
+  @apply px-3 first:rounded-l-lg last:rounded-r-lg;
+}
+table>tbody>tr {
+  @apply even:bg-slate-100 md:even:bg-transparent md:hover:bg-slate-100 transition-all h-10 md:h-12;
+}
+table>tbody>tr>td {
+  @apply px-3 first:rounded-l-lg last:rounded-r-lg;
+}
+table>tbody>tr>td>p {
+  @apply truncate max-w-[250px] text-sm md:text-base;
+}
+.table_title {
+  @apply flex items-center gap-1 text-left h-4 select-none uppercase text-[11px] md:text-xs w-max;
+}
+.table_btn_pag {
+  @apply bg-slate-100 p-1 rounded-full hover:bg-slate-200 transition-all disabled:cursor-default disabled:opacity-40;
+}
+
+/* Forms */
+.input_label {
+  @apply font-medium text-[13px] text-slate-600 tracking-tight;
+}
+.input_error { 
+  @apply h-5 mt-1;
+}
+.input_error > p { 
+  @apply font-semibold text-xs text-red-500;
+}
+.file_input {
+  @apply block w-full max-w-md text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200 file:disabled:text-slate-500 file:disabled:bg-slate-100 focus:outline-none;
+}
+
+/* Text Styling */
+.title {
+  @apply text-xl md:text-2xl font-semibold md:font-medium;
+}
+
+.semititle {
+  @apply text-lg md:text-2xl font-semibold md:font-medium;
+}
+
+.subtitle {
+  @apply text-sm md:text-base font-semibold;
+}
+
+.list { 
+  @apply w-full min-w-[300px] space-y-6;
+}
+.list_item {
+  @apply border border-orange-200 w-full py-5 px-4 bg-white rounded-md;
+}
+
+.chip {
+  @apply flex gap-1 items-center py-1 px-2 rounded-full w-max border font-semibold tracking-tight text-[10px] md:text-xs uppercase;
+}
+
+.login_btn {
+  @apply flex-center gap-1 px-4 py-3 rounded-lg w-full md:w-max border hover:bg-slate-50 active:bg-slate-50 transition-all;
+}
+.login_btn > p {
+  @apply font-medium text-xs md:text-sm  text-slate-950;
+}
+
+.dropdown {
+  @apply absolute right-0 top-full mt-3 p-4 rounded-lg bg-white min-w-[260px] md:min-w-[360px] max-w-max border z-20 shadow-lg;
+}
+
+/* Home */
+.options_grid {
+  @apply 
+  grid grid-flow-col md:gap-2 
+  border md:border-none 
+  rounded-lg md:rounded-none
+  overflow-hidden md:overflow-visible
+  max-w-xs
+  md:max-w-3xl
+  border-y
+  md:bg-transparent
+  bg-white
+}
+
+/* Scrollbar */
+/* width */
+::-webkit-scrollbar {
+  width:5px;
+  height:5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background:#f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background:#888;
+  border-radius:10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background:#555;
 }

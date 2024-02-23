@@ -49,10 +49,10 @@ export default function SearchInput() {
   }, [searchTerm, allLots]);
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 card">
       <input
         type="search"
-        className="w-full relative m-0 -mr-0.5 block min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-withe-600 dark:text-withe-200 dark:placeholder:text-withe-200 dark:focus:border-primary"
+        className="input"
         placeholder="Buscar"
         aria-label="Search"
         aria-describedby="button-addon3"
