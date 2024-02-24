@@ -1,9 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { use, useEffect, useState } from "react";
-import LogoIcon from "./icons/LogoIcon";
-import { CollapsIcon } from "./icons/ColapsIcon";
+import { useState } from "react";
 import { faGlobe, faList, faArrowsSpin, faBoxesPacking, faDollarSign, faArrowTrendDown, faHandHoldingDollar, faSunPlantWilt, faBarChart } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +10,7 @@ import Link from "next/link";
 interface MenuItem {
   id: number;
   label: string;
-  icon: any; // O el tipo específico del icono
+  icon: any; 
   link: string;
 }
 

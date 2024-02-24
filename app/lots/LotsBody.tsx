@@ -91,17 +91,10 @@ export default function Lots() {
 
   // useEffect(() => {}, [handleSaveLot]);
 
-
-
-
-
-
-
-
   return (
     <>
       <div className='space-y-4 px-6'>
-        <div className="card grid grid-cols-4 gap-4 mt-10">
+        <div className="card grid grid-cols-4 gap-4 mt-4">
           <input
             type="text"
             className="input"
@@ -132,12 +125,16 @@ export default function Lots() {
           />
           <input
             type="number"
+            min={0}
+            max={10000000}
             className="input"
             placeholder="Latitud"
             onChange={handleSetLatitude}
           />
           <input
             type="number"
+            min={0}
+            max={10000000}
             className="input"
             placeholder="Longitud"
             onChange={handleSetLength}

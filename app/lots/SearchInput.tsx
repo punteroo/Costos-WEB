@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getAllLots, postLot } from "../api/apis";
+import { getAllLots } from "../api/apis";
+import List from "../components/List";
 
 export default function SearchInput() {
   const [allLots, setAllLots] = useState([]);
@@ -53,7 +54,7 @@ export default function SearchInput() {
       <input
         type="search"
         className="input"
-        placeholder="Buscar"
+        placeholder="Busqueda por lote"
         aria-label="Search"
         aria-describedby="button-addon3"
         onChange={(e) => setSearchTerm(e.target.value)}
@@ -61,32 +62,7 @@ export default function SearchInput() {
 
 
       {/* Tabla de lotes filtrados */}
-      <table className="table-auto mt-4 w-full text-center text-white">
-        <thead>
-          <tr>
-            <th>Razon Social</th>
-            <th>Establecimiento</th>
-            <th>Lote</th>
-            <th>Superficie</th>
-            <th>Latitud</th>
-            <th>Longitud</th>
-            <th>Condicion</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredLots.map((lot: Lot) => (
-            <tr key={lot.idLot}>
-              <td>{lot.businessName}</td>
-              <td>{lot.establishment}</td>
-              <td>{lot.lot}</td>
-              <td>{lot.surface}</td>
-              <td>{lot.latitude}</td>
-              <td>{lot.length}</td>
-              <td>{lot.condition}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <List filtered={filteredLots}/>
     </div>
   );
 }
