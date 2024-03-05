@@ -1,24 +1,14 @@
 import { useEffect, useState } from "react";
 import { getAllLots } from "../api/apis";
-import List from "../components/List";
+import List from "./List";
+import { LotInterface } from "../components/interfaces/interface";
 
 export default function SearchInput() {
   const [allLots, setAllLots] = useState([]);
   const [filteredLots, setFilteredLots] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // buscador
 
-  type Lot = {
-    idLot: number;
-    businessName: string;
-    establishment: string;
-    lot: string;
-    surface: number;
-    latitude: number;
-    length: number;
-    condition: string;
-  };
-
-  // useEffect
+   // useEffect
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,8 +33,8 @@ export default function SearchInput() {
 
   useEffect(() => {
     // Filtrar lotes según el término de búsqueda
-    const filtered = allLots.filter((lot: Lot) =>
-      lot.lot.toLowerCase().includes(searchTerm.toLowerCase())
+    const filtered = allLots.filter((lot: LotInterface) =>
+      lot.lot?.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredLots(filtered);
   }, [searchTerm, allLots]);

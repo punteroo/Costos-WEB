@@ -4,19 +4,9 @@ import { postLot } from "../api/apis";
 import { addOk } from "../components/alerts/sweet";
 import { useState } from "react";
 import SearchInput from "./SearchInput";
+import { LotInterface } from "../components/interfaces/interface";
 
-
-type Lot = {
-  businessName: string;
-  establishment: string;
-  lot: string;
-  surface: number;
-  latitude: number;
-  length: number;
-  condition: string;
-};
-
-export default function Lots() {
+export default function LotsBody() {
   // hooks states
   const [businessName, setBusinessName] = useState("");
   const [establishment, setEstablishment] = useState("");
@@ -58,7 +48,7 @@ export default function Lots() {
   const handleSaveLot = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const lotObject: Lot = {
+    const lotObject: LotInterface = {
       businessName,
       establishment,
       lot,
@@ -93,7 +83,7 @@ export default function Lots() {
 
   return (
     <>
-      <div className='space-y-4 px-6'>
+      <div className="space-y-4 px-6">
         <div className="card grid grid-cols-4 gap-4 mt-4">
           <input
             type="text"
@@ -140,20 +130,22 @@ export default function Lots() {
             onChange={handleSetLength}
           />
 
-          <input
+          <select name="" id="" onChange={()=>handleSetCondition} className="input">
+            <option value="">Propio</option>
+            <option value="">Arrendado</option>
+          </select>
+          {/* <input
             type="text"
             className="input"
             placeholder="Condicion"
             onChange={handleSetCondition}
-          />
+          /> */}
 
           <button
             className="primary_btn btn_black max-w-max"
             onClick={handleSaveLot}
           >
-            <p className='w-28'>
-              Agregar
-            </p>
+            <p className="w-28">Agregar</p>
           </button>
         </div>
 
