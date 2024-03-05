@@ -19,6 +19,16 @@ export const getAllLots = async () => {
     );
     return result;
   } catch (error) {
-    console;
+    console.error("Error al obtener los Lotes:", error);
+  }
+};
+export const getOneLot = async (idLot: number) => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/lot/getOneLot/${idLot}`
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al obtener un Lote:", error);
   }
 };

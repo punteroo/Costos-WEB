@@ -1,10 +1,11 @@
-import Layout from "../components/Layout";
+import Dashboard from "./dashboard";
+import Layout from "../components/Layout";;
 
-export default function Dashboard() {
+export default function PageDashboard() {
   return (
     <>
       <Layout>
-        <div>Dashboard</div>
+        <Dashboard/>
       </Layout>
     </>
   );
