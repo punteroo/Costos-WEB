@@ -6,6 +6,7 @@ import axios from "axios";
 
 const MySwal = withReactContent(Swal);
 
+// Carga registro ok
 export const addOk = (value: string) => {
   MySwal.fire({
     position: "top",
@@ -17,9 +18,11 @@ export const addOk = (value: string) => {
   });
 };
 
-export const editLot = async (idLot: number) => {
+
+// Editar un registro
+export const editLot = async (id: number, param1: string, paramBase: string, paramMethod: string) => {
   try {
-    const response = await getOneLot(idLot);
+    const response = await getOneLot(id);
     const objeto: LotInterface | undefined = response?.data;
 
     if (objeto) {
@@ -87,17 +90,18 @@ export const editLot = async (idLot: number) => {
             Object.entries(lotObject).filter(([key, value]) => value !== "")
           );
 
-          // Puedes hacer algo con lotObject, como enviarlo a la API para actualizar el objeto
-          console.log("Nuevo objeto:", finalPatchLot);
 
           try {
             const result = await axios.patch(
-              `${process.env.NEXT_PUBLIC_BASE_URL}/lot/patchLot/${idLot}`,
+              `${process.env.NEXT_PUBLIC_BASE_URL}${paramBase}${paramMethod}/${id}`,
               finalPatchLot
             );
+
+            addOk('El Lote se modifico con exito')
+
             return result.data;
           } catch (error) {
-            console.error("error al intentar realizar el patch: ", error);
+            console.error(`error al intentar realizar el patch en ${param1}: ${error}`);
           }
         },
       });
@@ -106,3 +110,38 @@ export const editLot = async (idLot: number) => {
     console.error("Error al obtener el objeto:", error);
   }
 };
+
+// Eliminar un registro
+export const deleteRow = async (id: number, param1: string, paramBase: string, paramMethod: string) => {
+  try {
+    Swal.fire({
+      title: "¿Confirma la Eliminación?",
+      text: "Este proceso no tiene retorno",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DC143C",
+      cancelButtonColor: "#DCDCDC",
+      confirmButtonText: "Eliminar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const resultDelete = await axios.delete(
+            `${process.env.NEXT_PUBLIC_BASE_URL}${paramBase}${paramMethod}/${id}`
+          );
+          if (resultDelete.status === 200) {
+            Swal.fire({
+              title: "Eliminado",
+              text: `El ${param1} ha sido eliminado`,
+              icon: "success",
+            });
+          }
+        } catch (error) {
+          console.error(`Error al intentar eliminar el ${param1}: ${error}`);
+        }
+      }
+    });
+  } catch (error) {
+    console.error(`Error en el método de eliminar ${param1}: ${error}`);
+  }
+};
+

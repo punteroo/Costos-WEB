@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { LotInterface } from "../components/interfaces/interface";
-import { editLot } from "../components/alerts/sweet";
+import { editLot, deleteRow } from "../components/alerts/sweet";
 
 interface Lot {
   filtered: LotInterface[];
@@ -10,6 +10,7 @@ function List({ filtered }: Lot) {
   // paginado
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
+  const [forceUpdate, setForceUpdate] = useState(false);
 
   // Calcula el índice de inicio y fin de la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -21,13 +22,20 @@ function List({ filtered }: Lot) {
     pageNumbers.push(i);
   }
 
+  const maximum = Math.max(...pageNumbers);
 
+  // handlers
   const handleEditLot = (idLot: number) => {
-    editLot(idLot)
-  }
-  const handleDeleteLot = () => {
-    alert('Eliminar')
-  }
+    editLot(idLot, "Lote", `${process.env.NEXT_PUBLIC_BASE_LOT}`, `${process.env.NEXT_PUBLIC_LOT_EDIT}`);
+  };
+  const handleDeleteRow = (idLot: number) => {
+    deleteRow(idLot, "Lote", `${process.env.NEXT_PUBLIC_BASE_LOT}`, `${process.env.NEXT_PUBLIC_LOT_DELETE}`);
+  };
+
+  // useEffect para actualizar la lista cuando cambie
+  useEffect(() => {
+    setForceUpdate((prevState) => !prevState);
+  }, [filtered]);
 
   return (
     <>
@@ -75,7 +83,6 @@ function List({ filtered }: Lot) {
                 <td>{lot.condition}</td>
                 <td className="px-6 py-4">
                   <div className="flex justify-end gap-4">
-
                     <button x-data="{ tooltip: 'Edite' }">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -85,8 +92,11 @@ function List({ filtered }: Lot) {
                         stroke="currentColor"
                         className="h-6 w-6"
                         x-tooltip="tooltip"
-                        onClick={() => lot.idLot !== undefined && handleEditLot(lot.idLot)}
-                        >
+                        onClick={() =>
+                          lot.idLot !== undefined && handleEditLot(lot.idLot)
+                        }
+
+                      >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -103,8 +113,9 @@ function List({ filtered }: Lot) {
                         stroke="currentColor"
                         className="h-6 w-6"
                         x-tooltip="tooltip"
-                        onClick={handleDeleteLot}
-
+                        onClick={() =>
+                          lot.idLot !== undefined && handleDeleteRow(lot.idLot)
+                        }
                       >
                         <path
                           strokeLinecap="round"
@@ -135,7 +146,12 @@ function List({ filtered }: Lot) {
           <ul className="flex items-center -mx-[6px]">
             <li className="px-[6px]">
               <button
-                onClick={() => setCurrentPage(currentPage - 1)}
+                onClick={() => {
+                  if (currentPage > 1) {
+                    setCurrentPage(currentPage - 1);
+                  }
+                }}
+                disabled={currentPage === 1}
                 className="disabled w-9 h-9 flex items-center justify-center rounded-md border border-[#EDEFF1] text-[#838995] text-base hover:bg-primary hover:border-primary hover:text-black"
               >
                 <span>
@@ -169,7 +185,7 @@ function List({ filtered }: Lot) {
               <button
                 onClick={() => setCurrentPage(currentPage + 1)}
                 className="w-9 h-9 flex items-center justify-center rounded-md border border-[#EDEFF1] text-[#838995] text-base hover:bg-primary hover:border-primary hover:text-black"
-                // disabled={currentPage === Math.ceil(filtered.length / itemsPerPage)}
+                disabled={currentPage === maximum || currentPage === 1}
               >
                 <span>
                   <svg
