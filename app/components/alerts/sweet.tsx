@@ -4,6 +4,8 @@ import { LotInterface } from "../interfaces/interface";
 import { getOneLot } from "@/app/api/apis";
 import axios from "axios";
 
+
+
 const MySwal = withReactContent(Swal);
 
 // Carga registro ok
@@ -114,7 +116,7 @@ export const editLot = async (id: number, param1: string, paramBase: string, par
 // Eliminar un registro
 export const deleteRow = async (id: number, param1: string, paramBase: string, paramMethod: string) => {
   try {
-    Swal.fire({
+    await Swal.fire({
       title: "¿Confirma la Eliminación?",
       text: "Este proceso no tiene retorno",
       icon: "warning",

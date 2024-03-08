@@ -2,11 +2,17 @@ import { useEffect, useState } from "react";
 import { getAllLots } from "../api/apis";
 import List from "./List";
 import { LotInterface } from "../components/interfaces/interface";
+import { useRouter } from "next/navigation";
+
+
+
 
 export default function SearchInput() {
   const [allLots, setAllLots] = useState([]);
   const [filteredLots, setFilteredLots] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // buscador
+  const router = useRouter()
+
 
    // useEffect
   useEffect(() => {

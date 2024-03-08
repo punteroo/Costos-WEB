@@ -5,6 +5,7 @@ import { addOk } from "../components/alerts/sweet";
 import { useState } from "react";
 import SearchInput from "./SearchInput";
 import { LotInterface } from "../components/interfaces/interface";
+import { useRouter } from "next/navigation";
 
 export default function LotsBody() {
   // hooks states
@@ -15,6 +16,7 @@ export default function LotsBody() {
   const [latitude, setLatitude] = useState(0);
   const [length, setLength] = useState(0);
   const [condition, setCondition] = useState("");
+  const router = useRouter()
 
   // handlers
   const handleSetBusinessName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,9 +43,10 @@ export default function LotsBody() {
     setLength(Number(e.target.value));
   };
 
-  const handleSetCondition = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCondition(e.target.value);
+  const handleSetCondition = (value: string) => {
+    setCondition(value);
   };
+  
 
   const handleSaveLot = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -71,6 +74,7 @@ export default function LotsBody() {
         setLatitude(0);
         setLength(0);
         setCondition("");
+        router.refresh()
       } else {
         console.log("Error al cargar el Lote o resultado no válido");
       }
@@ -130,16 +134,15 @@ export default function LotsBody() {
             onChange={handleSetLength}
           />
 
-          <select name="" id="" onChange={()=>handleSetCondition} className="input">
-            <option value="">Propio</option>
-            <option value="">Arrendado</option>
-          </select>
-          {/* <input
-            type="text"
-            className="input"
-            placeholder="Condicion"
-            onChange={handleSetCondition}
-          /> */}
+<select
+  name=""
+  id=""
+  onInput={(e) => handleSetCondition((e.target as HTMLSelectElement).value)}
+  className="input"
+>
+  <option value="Propio">Propio</option>
+  <option value="Arrendado">Arrendado</option>
+</select>
 
           <button
             className="primary_btn btn_black max-w-max"

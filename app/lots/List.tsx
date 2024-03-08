@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { LotInterface } from "../components/interfaces/interface";
 import { editLot, deleteRow } from "../components/alerts/sweet";
+import { useRouter } from "next/navigation";
 
 interface Lot {
   filtered: LotInterface[];
@@ -11,6 +12,7 @@ function List({ filtered }: Lot) {
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
   const [forceUpdate, setForceUpdate] = useState(false);
+  const router = useRouter();
 
   // Calcula el índice de inicio y fin de la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -26,16 +28,28 @@ function List({ filtered }: Lot) {
 
   // handlers
   const handleEditLot = (idLot: number) => {
-    editLot(idLot, "Lote", `${process.env.NEXT_PUBLIC_BASE_LOT}`, `${process.env.NEXT_PUBLIC_LOT_EDIT}`);
+    editLot(
+      idLot,
+      "Lote",
+      `${process.env.NEXT_PUBLIC_BASE_LOT}`,
+      `${process.env.NEXT_PUBLIC_LOT_EDIT}`
+    );
   };
-  const handleDeleteRow = (idLot: number) => {
-    deleteRow(idLot, "Lote", `${process.env.NEXT_PUBLIC_BASE_LOT}`, `${process.env.NEXT_PUBLIC_LOT_DELETE}`);
+  const handleDeleteRow = async (idLot: number) => {
+    try {
+      await deleteRow(
+        idLot,
+        "Lote",
+        `${process.env.NEXT_PUBLIC_BASE_LOT}`,
+        `${process.env.NEXT_PUBLIC_LOT_DELETE}`
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      router.refresh();
+      console.log("first");
+    }
   };
-
-  // useEffect para actualizar la lista cuando cambie
-  useEffect(() => {
-    setForceUpdate((prevState) => !prevState);
-  }, [filtered]);
 
   return (
     <>
@@ -95,7 +109,6 @@ function List({ filtered }: Lot) {
                         onClick={() =>
                           lot.idLot !== undefined && handleEditLot(lot.idLot)
                         }
-
                       >
                         <path
                           strokeLinecap="round"
