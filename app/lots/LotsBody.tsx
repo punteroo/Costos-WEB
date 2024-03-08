@@ -5,7 +5,7 @@ import { addOk } from "../components/alerts/sweet";
 import { useState } from "react";
 import SearchInput from "./SearchInput";
 import { LotInterface } from "../components/interfaces/interface";
-import { useRouter } from "next/navigation";
+
 
 export default function LotsBody() {
   // hooks states
@@ -15,8 +15,8 @@ export default function LotsBody() {
   const [surface, setSurface] = useState(0);
   const [latitude, setLatitude] = useState(0);
   const [length, setLength] = useState(0);
-  const [condition, setCondition] = useState("");
-  const router = useRouter()
+  const [condition, setCondition] = useState("Propio");
+
 
   // handlers
   const handleSetBusinessName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +74,6 @@ export default function LotsBody() {
         setLatitude(0);
         setLength(0);
         setCondition("");
-        router.refresh()
       } else {
         console.log("Error al cargar el Lote o resultado no válido");
       }
