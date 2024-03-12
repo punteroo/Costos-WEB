@@ -18,7 +18,7 @@ export const postLot = async (lot: LotInterface) => {
 export const editLot = async (id: number, lot: LotInterface) => {
   try {
     const result = await axios.patch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_LOT}${process.env.NEXT_PUBLIC_LOT_POST}/${id}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_LOT}${process.env.NEXT_PUBLIC_LOT_EDIT}/${id}`,
       lot
     );
     return result;
@@ -52,7 +52,7 @@ export const getOneLot = async (idLot: number) => {
 export const deleteLot = async (id: number) => {
   try {
     const result = await axios.delete(
-      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_LOT}${process.env.NEXT_PUBLIC_LOT_POST}/${id}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_LOT}${process.env.NEXT_PUBLIC_LOT_DELETE}/${id}`
     );
     return result;
   } catch (error) {

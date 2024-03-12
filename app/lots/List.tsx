@@ -7,22 +7,35 @@ interface Lot {
 }
 
 function List({ filtered }: Lot) {
+
   
-  // paginado
-  const itemsPerPage = 4;
-  const [currentPage, setCurrentPage] = useState(1);
+// paginado
+const itemsPerPage = 4;
+const [currentPage, setCurrentPage] = useState(1);
+const [currentItems, setCurrentItems] = useState<LotInterface[]>([]);
+const [maximum, setMaximum] = useState(1);
+const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
-  // Calcula el índice de inicio y fin de la página actual
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
-    pageNumbers.push(i);
+useEffect(() => {
+  if (filtered) {
+    // Calcula el índice de inicio y fin de la página actual
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
+    setCurrentItems(currentItems);
+  
+    const newPageNumbers = [];
+    for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
+      newPageNumbers.push(i);
+    }
+    setPageNumbers(newPageNumbers);
+  
+    const maximum = Math.max(...newPageNumbers, 1);
+    setMaximum(maximum);
   }
+}, [currentPage, filtered, itemsPerPage]);
 
-  const maximum = Math.max(...pageNumbers, 1);
+
 
   // handlers
   const handleAlertEditLot = (idLot: number) => {
