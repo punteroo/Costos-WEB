@@ -1,7 +1,7 @@
 "use client";
 
 import { postLot } from "../api/apis";
-import { addOk } from "../components/alerts/sweet";
+import { alertAddOk } from "../components/alerts/sweet";
 import { useState } from "react";
 import SearchInput from "./SearchInput";
 import { LotInterface } from "../components/interfaces/interface";
@@ -16,7 +16,6 @@ export default function LotsBody() {
   const [latitude, setLatitude] = useState(0);
   const [length, setLength] = useState(0);
   const [condition, setCondition] = useState("Propio");
-
 
   // handlers
   const handleSetBusinessName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +45,6 @@ export default function LotsBody() {
   const handleSetCondition = (value: string) => {
     setCondition(value);
   };
-  
 
   const handleSaveLot = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -66,7 +64,7 @@ export default function LotsBody() {
 
       // Verifica si result es undefined antes de acceder a sus propiedades
       if (result && result.status === 201) {
-        addOk("Lote cargado con éxito");
+        alertAddOk("Lote cargado con éxito");
         setBusinessName("");
         setEstablishment("");
         setLot("");
@@ -75,25 +73,23 @@ export default function LotsBody() {
         setLength(0);
         setCondition("");
       } else {
-        console.log("Error al cargar el Lote o resultado no válido");
+        throw new Error("Error al cargar el Lote o resultado no válido");
       }
     } catch (error) {
-      console.error("Error al cargar el Lote:", error);
+      throw new Error(`Error al cargar el Lote: ${error}`);
     }
   };
-
-  // useEffect(() => {}, [handleSaveLot]);
 
   return (
     <>
       <div className="space-y-4 px-6">
         <div className="card grid grid-cols-4 gap-4 mt-4">
-          <input
-            type="text"
-            className="input"
-            placeholder="Razon Social"
-            onChange={handleSetBusinessName}
-          />
+        <input
+              type="text"
+              className="input"
+              placeholder="Razon Social"
+              onChange={handleSetBusinessName}
+            />
 
           <input
             type="text"
@@ -133,15 +129,15 @@ export default function LotsBody() {
             onChange={handleSetLength}
           />
 
-<select
-  name=""
-  id=""
-  onInput={(e) => handleSetCondition((e.target as HTMLSelectElement).value)}
-  className="input"
->
-  <option value="Propio">Propio</option>
-  <option value="Arrendado">Arrendado</option>
-</select>
+          <select
+            onInput={(e) =>
+              handleSetCondition((e.target as HTMLSelectElement).value)
+            }
+            className="input"
+          >
+            <option value="Propio">Propio</option>
+            <option value="Arrendado">Arrendado</option>
+          </select>
 
           <button
             className="primary_btn btn_black max-w-max"

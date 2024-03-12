@@ -9,6 +9,15 @@ export interface LotInterface {
     condition?: string;
 }
 
+export interface SupplyInterface {
+    idSupply?: number,
+    category?: string,
+    subCategory?: string,
+    family?: string,
+    commercialBrand?: string,
+    idUnit?: number;
+}
+
 
 export interface CostInterface {
     money: string,
@@ -35,10 +44,7 @@ export interface RotationInterface {
     idLot: number
 }
 
-export interface SupplyInterface {
-    category: string,
-    subCategory: string,
-    family: string,
-    commercialBrand: string,
-    unit: string
+export interface UnitSupplyInterface {
+    idUnit: number,
+    description: string
 }
