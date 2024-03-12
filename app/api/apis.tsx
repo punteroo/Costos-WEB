@@ -17,7 +17,7 @@ export const postLot = async (lot: LotInterface) => {
 
 export const editLot = async (id: number, lot: LotInterface) => {
   try {
-    const result = await axios.post(
+    const result = await axios.patch(
       `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_LOT}${process.env.NEXT_PUBLIC_LOT_POST}/${id}`,
       lot
     );
@@ -76,8 +76,8 @@ export const postSupply = async (Supply: SupplyInterface) => {
 
 export const editSupply = async (id: number, Supply: SupplyInterface) => {
   try {
-    const result = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_SUPPLY}${process.env.NEXT_PUBLIC_SUPPLY_POST}/${id}`,
+    const result = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_SUPPLY}${process.env.NEXT_PUBLIC_SUPPLY_EDIT}/${id}`,
       Supply
     );
     return result;
@@ -100,7 +100,7 @@ export const getAllSupplies = async () => {
 export const getOneSupply = async (idSupply: number) => {
   try {
     const result = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_SUPPLY}${process.env.NEXT_PUBLIC_LOT_GETONE}/${idSupply}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_SUPPLY}${process.env.NEXT_PUBLIC_SUPPLY_GETONE}/${idSupply}`
     );
     return result;
   } catch (error) {

@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { SupplyInterface } from "../components/interfaces/interface";
 import {  alertDeleteSupply, alertPatchSupply } from "../components/alerts/sweet";
+import { UnitSupplyInterface } from "../components/interfaces/interface";
 
-interface Supply {
+
+interface ListProps {
   filtered: SupplyInterface[];
+  units: UnitSupplyInterface[];
 }
 
-function List({ filtered }: Supply) {
+
+function List({ filtered, units }: ListProps) {
   // paginado
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,7 +31,8 @@ function List({ filtered }: Supply) {
   const handleEditSupply = (idSupply: number) => {
     alertPatchSupply(
       idSupply,
-      "Insumo"
+      "Insumo",
+      units
     );
   };
   const handleDeleteRow = async (idSupply: number) => {
@@ -40,7 +45,6 @@ function List({ filtered }: Supply) {
       console.error(error);
     }
   };
-  console.log(currentItems)
   return (
     <>
       <div className="overflow-auto rounded-lg border border-gray-200 shadow-md my-5 md:h-80">

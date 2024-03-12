@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { LotInterface, SupplyInterface } from "../interfaces/interface";
+import { LotInterface, SupplyInterface, UnitSupplyInterface } from "../interfaces/interface";
 import {
   getOneLot,
   editLot,
@@ -151,7 +151,7 @@ export const alertDeleteLot = async (id: number, param1: string) => {
 /* INSUMOS */
 
 // Editar un Insumo
-export const alertPatchSupply = async (id: number, param1: string) => {
+export const alertPatchSupply = async (id: number, param1: string, units: UnitSupplyInterface[]) => {
   try {
     const response = await getOneSupply(id);
     const objeto: SupplyInterface | undefined = response?.data;
@@ -169,14 +169,10 @@ export const alertPatchSupply = async (id: number, param1: string) => {
         <label for="commercialBrand">Marca Comercial</label>
         <input type="text" id="commercialBrand" class="inputEdit" value="${objeto.commercialBrand}">
         <label for="unit">Unidad</label>
-        <select id="unit" class="inputEdit" value="${objeto.idUnit}">
-          <option value="1>Gr/Kg</option>
-          <option value="2">Gr</option>
-          <option value="3">Cm3/Lt</option>
-          <option value="4">Kg</option>
-          <option value="5">Lt/Gr</option>
-          <option value="6">Lts</option>
-          <option value="7">Cm3</option>
+        <select id="unit" class="inputEdit">
+          ${units.map((option) => `
+            <option value="${option.idUnit}" ${objeto.idUnit === option.idUnit ? 'selected' : ''}>${option.description}</option>
+          `).join('')}
         </select>
         
         `,
@@ -197,12 +193,11 @@ export const alertPatchSupply = async (id: number, param1: string) => {
             );
           const unitInput =
             Swal.getPopup()?.querySelector<HTMLInputElement>("#unit");
-
           const category = categoryInput?.value;
           const subCategory = subCategoryInput?.value;
           const family = familyInput?.value;
           const commercialBrand = commercialBrandInput?.value;
-          const idUnit = unitInput?.value;
+          const idUnit = Number(unitInput?.value);
 
           const object = {
             category,

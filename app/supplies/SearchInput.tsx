@@ -8,6 +8,7 @@ import { SupplyInterface } from "../components/interfaces/interface";
 
 export default function SearchInput() {
   const [allSupplies, setAllSupplies] = useState([]);
+  const [allUnits, setAllUnits] = useState([]);
   const [filteredSupplies, setFilteredSupplies] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // buscador
 
@@ -16,12 +17,15 @@ export default function SearchInput() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [responseAllSupplies] = await Promise.all([
+        const [responseAllSupplies, responseAllUnits] = await Promise.all([
           getAllSupplies(),
+          getAllUnits(),
         ])
         // Verifica si hay datos en la respuesta antes de llamar a setAllSupplies
           const resultAllSupplies = responseAllSupplies?.data;
+          const resultAllUnits = responseAllUnits?.data;
           setAllSupplies(resultAllSupplies);
+          setAllUnits(resultAllUnits);
           setFilteredSupplies(resultAllSupplies);
 
       } catch (error) {
@@ -54,7 +58,7 @@ export default function SearchInput() {
 
 
       {/* Tabla de lotes filtrados */}
-      <List filtered={filteredSupplies}/>
+      <List filtered={filteredSupplies} units={allUnits} />
     </div>
   );
 }
