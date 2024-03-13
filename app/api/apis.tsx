@@ -1,5 +1,6 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { LotInterface, RotationInterface, SupplyInterface } from "../components/interfaces/interface";
+import { alertRemoveError } from "../components/alerts/sweet";
 
 
 // LOTES
@@ -9,6 +10,7 @@ export const postLot = async (lot: LotInterface) => {
       `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_LOT}${process.env.NEXT_PUBLIC_LOT_POST}`,
       lot
     );
+    console.log(result)
     return result;
   } catch (error) {
     console.error("Error al cargar el Lote:", error);
@@ -54,9 +56,16 @@ export const deleteLot = async (id: number) => {
     const result = await axios.delete(
       `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_LOT}${process.env.NEXT_PUBLIC_LOT_DELETE}/${id}`
     );
+
     return result;
-  } catch (error) {
-    console.error("Error al eliminar el Lote:", error);
+  } catch (error:any) {
+    if (error instanceof AxiosError && error.response?.data.message === "Recurso no encontrado debido a una violación de clave foránea") {
+      // Manejar errores de Axios
+      alertRemoveError('El recurso no se puede eliminar por datos vinculados')
+    } else {
+      // Manejar otros tipos de errores
+      throw new Error(error);
+    }
   }
 };
 
@@ -114,8 +123,14 @@ export const deleteSupply = async (id: number) => {
       `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_SUPPLY}${process.env.NEXT_PUBLIC_SUPPLY_DELETE}/${id}`
     );
     return result;
-  } catch (error) {
-    console.error("Error al eliminar el Insumo:", error);
+  } catch (error:any) {
+    if (error instanceof AxiosError && error.response?.data.message === "Recurso no encontrado debido a una violación de clave foránea") {
+      // Manejar errores de Axios
+      alertRemoveError('El recurso no se puede eliminar por datos vinculados')
+    } else {
+      // Manejar otros tipos de errores
+      throw new Error(error);
+    }
   }
 };
 
@@ -187,7 +202,13 @@ export const deleteRotation = async (id: number) => {
       `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_ROTATION}${process.env.NEXT_PUBLIC_ROTATION_DELETE}/${id}`
     );
     return result;
-  } catch (error) {
-    console.error("Error al eliminar la Rotacion:", error);
+  } catch (error:any) {
+    if (error instanceof AxiosError && error.response?.data.message === "Recurso no encontrado debido a una violación de clave foránea") {
+      // Manejar errores de Axios
+      alertRemoveError('El recurso no se puede eliminar por datos vinculados')
+    } else {
+      // Manejar otros tipos de errores
+      throw new Error(error);
+    }
   }
 };

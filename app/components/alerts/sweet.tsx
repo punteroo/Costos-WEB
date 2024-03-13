@@ -15,6 +15,7 @@ import {
 } from "@/app/api/apis";
 
 const MySwal = withReactContent(Swal);
+import moment from 'moment'
 
 // Carga registro ok
 export const alertAddOk = (value: string) => {
@@ -24,6 +25,18 @@ export const alertAddOk = (value: string) => {
     title: value,
     showConfirmButton: false,
     timer: 1500,
+    toast: true,
+  });
+};
+
+// Error al eliminar ok
+export const alertRemoveError = (value: string) => {
+  MySwal.fire({
+    position: "top",
+    icon: "error",
+    title: value,
+    showConfirmButton: false,
+    timer: 3500,
     toast: true,
   });
 };
@@ -86,6 +99,8 @@ export const alertPatchLot = async (id: number, param1: string) => {
           const latitude = Number(latitudeInput?.value);
           const length = Number(lengthInput?.value);
           const condition = conditionInput?.value;
+          const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+
 
           const lotObject = {
             businessName,
@@ -95,6 +110,7 @@ export const alertPatchLot = async (id: number, param1: string) => {
             latitude,
             length,
             condition,
+            updatedAt: currentDate
           };
 
           const finalPatchLot = Object.fromEntries(
@@ -202,6 +218,8 @@ export const alertPatchSupply = async (id: number, param1: string, units: UnitSu
           const family = familyInput?.value;
           const commercialBrand = commercialBrandInput?.value;
           const idUnit = Number(unitInput?.value);
+          const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+
 
           const object = {
             category,
@@ -209,6 +227,7 @@ export const alertPatchSupply = async (id: number, param1: string, units: UnitSu
             family,
             commercialBrand,
             idUnit,
+            updatedAt: currentDate
           };
 
           const finalPatch = Object.fromEntries(
@@ -302,8 +321,6 @@ export const alertPatchRotation= async (id: number, param1: string, lots: LotInt
           <option value="Activo" ${objetoRotation.state === 'Activo' ? 'selected' : ''}>Activo</option>
           <option value="Inactivo" ${objetoRotation.state === 'Inactivo' ? 'selected' : ''}>Inactivo</option>
         </select>
-        
-     
         `,
         showCancelButton: true,
         confirmButtonText: "Guardar Cambios",
@@ -323,6 +340,8 @@ export const alertPatchRotation= async (id: number, param1: string, lots: LotInt
           const epoch = epochInput?.value;
           const state = stateInput?.value;
           const idLot = Number(lotInput?.value);
+          const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+
 
           const object = {
             campaign,
@@ -330,6 +349,7 @@ export const alertPatchRotation= async (id: number, param1: string, lots: LotInt
             epoch,
             state,
             idLot,
+            updatedAt: currentDate
           };
 
           const finalPatch = Object.fromEntries(

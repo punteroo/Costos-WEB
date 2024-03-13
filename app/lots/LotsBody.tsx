@@ -1,17 +1,14 @@
 "use client";
 
 import { postLot } from "../api/apis";
-import { alertAddOk } from "../components/alerts/sweet";
-import { useEffect, useState } from "react";
+import { alertAddOk, alertRemoveError } from "../components/alerts/sweet";
+import { useState } from "react";
 import SearchInput from "./SearchInput";
 import { LotInterface } from "../components/interfaces/interface";
-import { useDispatch, useSelector } from "react-redux";
 
+import moment from "moment";
 
 export default function LotsBody() {
-
- 
-
   // hooks states
   const [businessName, setBusinessName] = useState("");
   const [establishment, setEstablishment] = useState("");
@@ -53,6 +50,8 @@ export default function LotsBody() {
   const handleSaveLot = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+
     const lotObject: LotInterface = {
       businessName,
       establishment,
@@ -61,7 +60,10 @@ export default function LotsBody() {
       latitude,
       length,
       condition,
+      createdAt: currentDate,
+      updatedAt: currentDate,
     };
+
 
     try {
       const result = await postLot(lotObject);
@@ -69,11 +71,14 @@ export default function LotsBody() {
       // Verifica si result es undefined antes de acceder a sus propiedades
       if (result && result.status === 201) {
         alertAddOk("Lote cargado con éxito");
-
-      } else {
+      } else if(result?.data.message === "Recurso no encontrado debido a una violación de clave foránea"){
+        alertRemoveError('No se puede eliminar el registro, hay datos asociados')
+      }else {
         throw new Error("Error al cargar el Lote o resultado no válido");
+        
       }
     } catch (error) {
+      console.log('paso por aca')
       throw new Error(`Error al cargar el Lote: ${error}`);
     }
   };
@@ -82,12 +87,12 @@ export default function LotsBody() {
     <>
       <div className="space-y-4 px-6">
         <div className="card grid grid-cols-4 gap-4 mt-4">
-        <input
-              type="text"
-              className="input"
-              placeholder="Razon Social"
-              onChange={handleSetBusinessName}
-            />
+          <input
+            type="text"
+            className="input"
+            placeholder="Razon Social"
+            onChange={handleSetBusinessName}
+          />
 
           <input
             type="text"

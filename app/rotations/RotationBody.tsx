@@ -9,6 +9,9 @@ import {
   RotationInterface,
 } from "../components/interfaces/interface";
 
+import moment from "moment";
+
+
 export default function RotationBody() {
   // hooks states
   const [AllLots, setAllLots] = useState([]);
@@ -66,12 +69,17 @@ export default function RotationBody() {
   const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+
+
     const Object: RotationInterface = {
       campaign,
       epoch,
       crop,
       state,
       idLot: lot,
+      createdAt: currentDate,
+      updatedAt: currentDate,
     };
 
     try {

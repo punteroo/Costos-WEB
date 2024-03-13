@@ -7,6 +7,8 @@ export interface LotInterface {
     latitude?: number;
     length?: number;
     condition?: string;
+    createdAt?: string
+    updatedAt?: string
 }
 
 export interface SupplyInterface {
@@ -16,6 +18,8 @@ export interface SupplyInterface {
     family?: string,
     commercialBrand?: string,
     idUnit?: number;
+    createdAt?: string
+    updatedAt?: string
 }
 
 
@@ -24,6 +28,8 @@ export interface CostInterface {
     price: number,
     cant: number,
     idSupply: number
+    createdAt?: string
+    updatedAt?: string
 }
 
 export interface LaborInterface {
@@ -33,6 +39,8 @@ export interface LaborInterface {
     unit: string,
     idRotation: number,
     idLot: number
+    createdAt?: string
+    updatedAt?: string
 }
 
 
@@ -43,6 +51,8 @@ export interface RotationInterface {
     crop?: string,
     state?: string,
     idLot?: number
+    createdAt?: string
+    updatedAt?: string
 }
 
 export interface UnitSupplyInterface {
