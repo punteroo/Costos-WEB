@@ -37,11 +37,12 @@ export interface LaborInterface {
 
 
 export interface RotationInterface {
-    campaign: string,
-    epoch: string,
-    crop: string,
-    state: number,
-    idLot: number
+    idRotation?: number,
+    campaign?: string,
+    epoch?: string,
+    crop?: string,
+    state?: string,
+    idLot?: number
 }
 
 export interface UnitSupplyInterface {

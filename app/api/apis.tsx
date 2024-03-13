@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LotInterface, SupplyInterface } from "../components/interfaces/interface";
+import { LotInterface, RotationInterface, SupplyInterface } from "../components/interfaces/interface";
 
 
 // LOTES
@@ -129,5 +129,65 @@ export const getAllUnits = async () => {
     return result;
   } catch (error) {
     console.error("Error al obtener las Unidades:", error);
+  }
+};
+
+
+// INSUMOS
+export const postRotation = async (object: RotationInterface) => {
+  try {
+    const result = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_ROTATION}${process.env.NEXT_PUBLIC_ROTATION_POST}`,
+      object
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al cargar la Rotacion:", error);
+  }
+};
+
+export const editRotation = async (id: number, object: RotationInterface) => {
+  try {
+    const result = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_ROTATION}${process.env.NEXT_PUBLIC_ROTATION_EDIT}/${id}`,
+      object
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al editar la Rotacion:", error);
+  }
+};
+
+export const getAllRotations = async () => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_ROTATION}${process.env.NEXT_PUBLIC_ROTATION_GETALL}`
+    );
+    console.log(result)
+    return result;
+  } catch (error) {
+    console.error("Error al obtener las Rotaciones:", error);
+  }
+};
+
+export const getOneRotation = async (idRotation: number) => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_ROTATION}${process.env.NEXT_PUBLIC_ROTATION_GETONE}/${idRotation}`
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al obtener la Rotacion:", error);
+  }
+};
+
+export const deleteRotation = async (id: number) => {
+  try {
+    const result = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_ROTATION}${process.env.NEXT_PUBLIC_ROTATION_DELETE}/${id}`
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al eliminar la Rotacion:", error);
   }
 };

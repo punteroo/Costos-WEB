@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Layout from "./components/Layout";
+import {Provider} from 'react-redux'
 
 export default function Home() {
   return (

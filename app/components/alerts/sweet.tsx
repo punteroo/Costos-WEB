@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { LotInterface, SupplyInterface, UnitSupplyInterface } from "../interfaces/interface";
+import { LotInterface, RotationInterface, SupplyInterface, UnitSupplyInterface } from "../interfaces/interface";
 import {
   getOneLot,
   editLot,
@@ -8,6 +8,10 @@ import {
   getOneSupply,
   editSupply,
   deleteSupply,
+  getOneRotation,
+  getAllLots,
+  editRotation,
+  deleteRotation
 } from "@/app/api/apis";
 
 const MySwal = withReactContent(Swal);
@@ -247,6 +251,127 @@ export const alertDeleteSupply = async (id: number, param1: string) => {
       if (result.isConfirmed) {
         try {
           const resultDelete = await deleteSupply(id);
+          if (resultDelete?.status === 200) {
+            Swal.fire({
+              title: "Eliminado",
+              text: `El ${param1} ha sido eliminado`,
+              icon: "success",
+            });
+          }
+        } catch (error) {
+          throw new Error(`Error al intentar eliminar el ${param1}: ${error}`);
+        }
+      }
+    });
+  } catch (error) {
+   throw new Error(`Error en el método de eliminar ${param1}: ${error}`);
+  }
+};
+
+
+/* ROTACION */
+
+// Editar un Insumo
+export const alertPatchRotation= async (id: number, param1: string, lots: LotInterface[]) => {
+  try {
+    const [responseRotation, responseAllLots] = await Promise.all([getOneRotation(id),getAllLots()])
+
+
+    const objetoRotation: RotationInterface | undefined = responseRotation?.data;
+    const objetoLots: LotInterface[] | undefined = responseAllLots?.data;
+    console.log(objetoRotation?.state)
+    if (objetoRotation) {
+      Swal.fire({
+        title: "Editar Objeto",
+        html: `
+        <label for="lot">Lote</label>   
+        <select id="lot" class="inputEdit">
+        ${objetoLots?.map((option) => `
+          <option value="${option.idLot}" ${objetoRotation.idLot === option.idLot ? 'selected' : ''}>${option.businessName} - ${option.establishment} - ${option.lot}</option>
+        `).join('')}
+      </select>
+        <label for="campaign" >Campaña</label>
+        <input type="text" id="campaign" class="inputEdit" value="${objetoRotation.campaign}">
+        <label for="crop">Cosecha</label>
+        <input type="text" id="crop" class="inputEdit" value="${objetoRotation.crop}">
+        <label for="epoch">Epoca</label>
+        <input type="text" id="epoch" class="inputEdit" value="${objetoRotation.epoch}">
+        <label for="state">Estado</label>
+        <label for="state">Estado</label>
+        <select id="state" class="inputEdit">
+          <option value="Activo" ${objetoRotation.state === 'Activo' ? 'selected' : ''}>Activo</option>
+          <option value="Inactivo" ${objetoRotation.state === 'Inactivo' ? 'selected' : ''}>Inactivo</option>
+        </select>
+        
+     
+        `,
+        showCancelButton: true,
+        confirmButtonText: "Guardar Cambios",
+        cancelButtonText: "Cancelar",
+        preConfirm: async () => {
+          // Obtén los valores de los campos de manera segura
+          const lotInput = Swal.getPopup()?.querySelector<HTMLInputElement>("#lot");
+          const campaignInput = Swal.getPopup()?.querySelector<HTMLInputElement>("#campaign");
+          const cropInput =  Swal.getPopup()?.querySelector<HTMLInputElement>("#crop");
+          const epochInput = Swal.getPopup()?.querySelector<HTMLInputElement>("#epoch");
+          const stateInput = Swal.getPopup()?.querySelector<HTMLInputElement>("#state");
+
+
+
+          const campaign = campaignInput?.value;
+          const crop = cropInput?.value;
+          const epoch = epochInput?.value;
+          const state = stateInput?.value;
+          const idLot = Number(lotInput?.value);
+
+          const object = {
+            campaign,
+            crop,
+            epoch,
+            state,
+            idLot,
+          };
+
+          const finalPatch = Object.fromEntries(
+            Object.entries(object).filter(([key, value]) => value !== "")
+          );
+
+          try {
+            const result = await editRotation(id, finalPatch);
+
+
+            alertAddOk(`El ${param1} se modifico con exito`);
+
+            return result?.data;
+          } catch (error) {
+            console.error(
+              `error al intentar realizar el patch en ${param1}: ${error}`
+            );
+          }
+        },
+      });
+    }
+  } catch (error) {
+    throw new Error(`Error en el método de patch ${param1}: ${error}`);
+  }
+};
+
+
+// Eliminar un registro
+export const alertDeleteRotation = async (id: number, param1: string) => {
+  try {
+    await Swal.fire({
+      title: "¿Confirma la Eliminación?",
+      text: "Este proceso no tiene retorno",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DC143C",
+      cancelButtonColor: "#DCDCDC",
+      confirmButtonText: "Eliminar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const resultDelete = await deleteRotation(id);
           if (resultDelete?.status === 200) {
             Swal.fire({
               title: "Eliminado",

@@ -87,7 +87,7 @@ export default function SupplyBody() {
         setUnit(0);
       }
     } catch (error) {
-      throw new Error(`Error al cargar el Lote: ${error}`);
+      throw new Error(`Error al cargar el Insumo: ${error}`);
     }
   };
 

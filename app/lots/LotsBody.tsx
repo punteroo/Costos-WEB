@@ -2,12 +2,16 @@
 
 import { postLot } from "../api/apis";
 import { alertAddOk } from "../components/alerts/sweet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchInput from "./SearchInput";
 import { LotInterface } from "../components/interfaces/interface";
+import { useDispatch, useSelector } from "react-redux";
 
 
 export default function LotsBody() {
+
+ 
+
   // hooks states
   const [businessName, setBusinessName] = useState("");
   const [establishment, setEstablishment] = useState("");
@@ -65,13 +69,7 @@ export default function LotsBody() {
       // Verifica si result es undefined antes de acceder a sus propiedades
       if (result && result.status === 201) {
         alertAddOk("Lote cargado con éxito");
-        setBusinessName("");
-        setEstablishment("");
-        setLot("");
-        setSurface(0);
-        setLatitude(0);
-        setLength(0);
-        setCondition("");
+
       } else {
         throw new Error("Error al cargar el Lote o resultado no válido");
       }

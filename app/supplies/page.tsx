@@ -1,7 +1,7 @@
 import Layout from "../components/Layout";
 import SectionTitle from "../components/section-title";
 import SupplyBody from "./SupplyBody";
-import { SupplyTitleIcon } from "../components/icons/TitleIcon";
+import { SupplyTitleIcon } from "../assets/icons/TitleIcon";
 
 export const fetchCache = "force-no-store";
 export const dynamic = "force-dynamic";

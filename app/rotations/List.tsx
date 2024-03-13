@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { SupplyInterface } from "../components/interfaces/interface";
-import {  alertDeleteSupply, alertPatchSupply } from "../components/alerts/sweet";
-import { UnitSupplyInterface } from "../components/interfaces/interface";
+import { RotationInterface } from "../components/interfaces/interface";
+import {  alertDeleteRotation, alertPatchRotation } from "../components/alerts/sweet";
+import { LotInterface } from "../components/interfaces/interface";
 
-
+// quede aca en el alert}
 interface ListProps {
-  filtered: SupplyInterface[];
-  units: UnitSupplyInterface[];
+  filtered: RotationInterface[];
+  lots: LotInterface[];
 }
 
 
-function List({ filtered, units }: ListProps) {
+function List({ filtered, lots }: ListProps) {
   
   
  // paginado
 const itemsPerPage = 4;
 const [currentPage, setCurrentPage] = useState(1);
-const [currentItems, setCurrentItems] = useState<SupplyInterface[]>([]);
+const [currentItems, setCurrentItems] = useState<RotationInterface[]>([]);
 const [maximum, setMaximum] = useState(1);
 const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
@@ -27,6 +27,7 @@ useEffect(() => {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
     setCurrentItems(currentItems);
+    console.log(currentItems)
   
     const newPageNumbers = [];
     for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
@@ -41,18 +42,18 @@ useEffect(() => {
 
 
   // handlers
-  const handleEditSupply = (idSupply: number) => {
-    alertPatchSupply(
-      idSupply,
-      "Insumo",
-      units
+  const handleEditRotation = (idRotation: number) => {
+    alertPatchRotation(
+      idRotation,
+      "Rotacion",
+      lots
     );
   };
-  const handleDeleteRow = async (idSupply: number) => {
+  const handleDeleteRow = async (idRotation: number) => {
     try {
-      await alertDeleteSupply(
-        idSupply,
-        "Insumo"
+      await alertDeleteRotation(
+        idRotation,
+        "Rotacion"
       );
     } catch (error) {
       console.error(error);
@@ -66,34 +67,34 @@ useEffect(() => {
         <table className="w-full border-collapse bg-white text-left text-xs lg:text-sm text-gray-500">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Categoria
+            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                Lote
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Subcategoria
+                Campaña
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Familia
+                Epoca
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Marca Comercial
+                Cosecha
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Unidad
+                Estado
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 border-t border-gray-100 text-left">
             {currentItems && currentItems.length > 0 ? (
-              currentItems.map((Supply: any, index: number) => (
+              currentItems.map((rotation: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
-                    <div className="text-sm">{Supply.category}</div>
+                    <div className="text-sm">{rotation.idLot.businessName} - {rotation.idLot.establishment} - {rotation.idLot.lot}</div>
                   </th>
-                  <td className="px-6 py-4">{Supply.subCategory}</td>
-                  <td className="px-6 py-4">{Supply.family}</td>
-                  <td className="px-6 py-4">{Supply.commercialBrand}</td>
-                  <td>{Supply.idUnit?.description}</td>
+                  <td className="px-6 py-4">{rotation.campaign}</td>
+                  <td className="px-6 py-4">{rotation.epoch}</td>
+                  <td className="px-6 py-4">{rotation.crop}</td>
+                  <td>{rotation.state}</td>
                   <td className="px-6 py-4">
                     <div className="flex justify-end gap-4">
                       <button x-data="{ tooltip: 'Edite' }">
@@ -106,8 +107,8 @@ useEffect(() => {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            Supply.idSupply !== undefined &&
-                            handleEditSupply(Supply.idSupply)
+                            rotation.idRotation !== undefined &&
+                            handleEditRotation(rotation.idRotation)
                           }
                         >
                           <path
@@ -127,8 +128,8 @@ useEffect(() => {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            Supply.idSupply !== undefined &&
-                            handleDeleteRow(Supply.idSupply)
+                            rotation.idRotation !== undefined &&
+                            handleDeleteRow(rotation.idRotation)
                           }
                         >
                           <path

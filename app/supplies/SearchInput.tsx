@@ -34,7 +34,6 @@ export default function SearchInput() {
 
     fetchData();
   }, []);
-
   useEffect(() => {
     // Filtrar lotes según el término de búsqueda
     if (allSupplies && allSupplies.length > 0) {
