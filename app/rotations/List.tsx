@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
+import { RotationInterface } from "../components/interfaces/interface";
+import {  alertDeleteRotation, alertPatchRotation } from "../components/alerts/sweet";
 import { LotInterface } from "../components/interfaces/interface";
-import { alertPatchLot, alertDeleteLot } from "../components/alerts/sweet";
 
-interface Lot {
-  filtered: LotInterface[];
+// quede aca en el alert}
+interface ListProps {
+  filtered: RotationInterface[];
+  lots: LotInterface[];
 }
 
-function List({ filtered }: Lot) {
 
+function List({ filtered, lots }: ListProps) {
   
-// paginado
+  
+ // paginado
 const itemsPerPage = 4;
 const [currentPage, setCurrentPage] = useState(1);
-const [currentItems, setCurrentItems] = useState<LotInterface[]>([]);
+const [currentItems, setCurrentItems] = useState<RotationInterface[]>([]);
 const [maximum, setMaximum] = useState(1);
 const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
@@ -23,6 +27,7 @@ useEffect(() => {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
     setCurrentItems(currentItems);
+    console.log(currentItems)
   
     const newPageNumbers = [];
     for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
@@ -36,18 +41,25 @@ useEffect(() => {
 }, [currentPage, filtered, itemsPerPage]);
 
 
-
   // handlers
-  const handleAlertEditLot = (idLot: number) => {
-    alertPatchLot(idLot, "Lote");
+  const handleEditRotation = (idRotation: number) => {
+    alertPatchRotation(
+      idRotation,
+      "Rotacion",
+      lots
+    );
   };
-  const handleAlertDeleteLot = async (idLot: number) => {
+  const handleDeleteRow = async (idRotation: number) => {
     try {
-      await alertDeleteLot(idLot, "Lote");
+      await alertDeleteRotation(
+        idRotation,
+        "Rotacion"
+      );
     } catch (error) {
       console.error(error);
     }
   };
+
 
   return (
     <>
@@ -55,48 +67,37 @@ useEffect(() => {
         <table className="w-full border-collapse bg-white text-left text-xs lg:text-sm text-gray-500">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Razon Social
-              </th>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Establecimiento
-              </th>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
                 Lote
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Superficie
+                Campaña
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Latitud
+                Epoca
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Longitud
+                Cosecha
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Condicion
-              </th>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Acciones
+                Estado
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100 border-t border-gray-100">
+          <tbody className="divide-y divide-gray-100 border-t border-gray-100 text-left">
             {currentItems && currentItems.length > 0 ? (
-              currentItems.map((lot: LotInterface, index: number) => (
+              currentItems.map((rotation: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
-                    <div className="text-sm">{lot.businessName}</div>
+                    <div className="text-sm">{rotation.idLot.businessName} - {rotation.idLot.establishment} - {rotation.idLot.lot}</div>
                   </th>
-                  <td className="px-6 py-4">{lot.establishment}</td>
-                  <td className="px-6 py-4">{lot.lot}</td>
-                  <td className="px-6 py-4">{lot.surface}</td>
-                  <td>{lot.latitude}</td>
-                  <td>{lot.length}</td>
-                  <td>{lot.condition}</td>
+                  <td className="px-6 py-4">{rotation.campaign}</td>
+                  <td className="px-6 py-4">{rotation.epoch}</td>
+                  <td className="px-6 py-4">{rotation.crop}</td>
+                  <td>{rotation.state}</td>
                   <td className="px-6 py-4">
                     <div className="flex justify-end gap-4">
-                      <button>
+                      <button x-data="{ tooltip: 'Edite' }">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -106,8 +107,8 @@ useEffect(() => {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            lot.idLot !== undefined &&
-                            handleAlertEditLot(lot.idLot)
+                            rotation.idRotation !== undefined &&
+                            handleEditRotation(rotation.idRotation)
                           }
                         >
                           <path
@@ -117,7 +118,7 @@ useEffect(() => {
                           />
                         </svg>
                       </button>
-                      <button>
+                      <button x-data="{ tooltip: 'Delete' }">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -127,8 +128,8 @@ useEffect(() => {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            lot.idLot !== undefined &&
-                            handleAlertDeleteLot(lot.idLot)
+                            rotation.idRotation !== undefined &&
+                            handleDeleteRow(rotation.idRotation)
                           }
                         >
                           <path
@@ -152,9 +153,8 @@ useEffect(() => {
           </tbody>
         </table>
       </div>
-
-      {/* Botones de paginación */}
-      <div className="flex justify-center mt-4">
+            {/* Botones de paginación */}
+            <div className="flex justify-center mt-4">
         <div
           className="
            inline-flex
@@ -228,6 +228,8 @@ useEffect(() => {
       </div>
     </>
   );
+  
+  
 }
 
 export default List;

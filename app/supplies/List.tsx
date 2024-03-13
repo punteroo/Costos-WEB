@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { LotInterface } from "../components/interfaces/interface";
-import { alertPatchLot, alertDeleteLot } from "../components/alerts/sweet";
+import { SupplyInterface } from "../components/interfaces/interface";
+import {  alertDeleteSupply, alertPatchSupply } from "../components/alerts/sweet";
+import { UnitSupplyInterface } from "../components/interfaces/interface";
 
-interface Lot {
-  filtered: LotInterface[];
+
+interface ListProps {
+  filtered: SupplyInterface[];
+  units: UnitSupplyInterface[];
 }
 
-function List({ filtered }: Lot) {
 
+function List({ filtered, units }: ListProps) {
   
-// paginado
+  
+ // paginado
 const itemsPerPage = 4;
 const [currentPage, setCurrentPage] = useState(1);
-const [currentItems, setCurrentItems] = useState<LotInterface[]>([]);
+const [currentItems, setCurrentItems] = useState<SupplyInterface[]>([]);
 const [maximum, setMaximum] = useState(1);
 const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
@@ -36,18 +40,25 @@ useEffect(() => {
 }, [currentPage, filtered, itemsPerPage]);
 
 
-
   // handlers
-  const handleAlertEditLot = (idLot: number) => {
-    alertPatchLot(idLot, "Lote");
+  const handleEditSupply = (idSupply: number) => {
+    alertPatchSupply(
+      idSupply,
+      "Insumo",
+      units
+    );
   };
-  const handleAlertDeleteLot = async (idLot: number) => {
+  const handleDeleteRow = async (idSupply: number) => {
     try {
-      await alertDeleteLot(idLot, "Lote");
+      await alertDeleteSupply(
+        idSupply,
+        "Insumo"
+      );
     } catch (error) {
       console.error(error);
     }
   };
+
 
   return (
     <>
@@ -56,47 +67,36 @@ useEffect(() => {
           <thead className="bg-gray-50">
             <tr>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Razon Social
+                Categoria
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Establecimiento
+                Subcategoria
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Lote
+                Familia
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Superficie
+                Marca Comercial
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Latitud
-              </th>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Longitud
-              </th>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Condicion
-              </th>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Acciones
+                Unidad
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100 border-t border-gray-100">
+          <tbody className="divide-y divide-gray-100 border-t border-gray-100 text-left">
             {currentItems && currentItems.length > 0 ? (
-              currentItems.map((lot: LotInterface, index: number) => (
+              currentItems.map((Supply: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
-                    <div className="text-sm">{lot.businessName}</div>
+                    <div className="text-sm">{Supply.category}</div>
                   </th>
-                  <td className="px-6 py-4">{lot.establishment}</td>
-                  <td className="px-6 py-4">{lot.lot}</td>
-                  <td className="px-6 py-4">{lot.surface}</td>
-                  <td>{lot.latitude}</td>
-                  <td>{lot.length}</td>
-                  <td>{lot.condition}</td>
+                  <td className="px-6 py-4">{Supply.subCategory}</td>
+                  <td className="px-6 py-4">{Supply.family}</td>
+                  <td className="px-6 py-4">{Supply.commercialBrand}</td>
+                  <td>{Supply.idUnit?.description}</td>
                   <td className="px-6 py-4">
                     <div className="flex justify-end gap-4">
-                      <button>
+                      <button x-data="{ tooltip: 'Edite' }">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -106,8 +106,8 @@ useEffect(() => {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            lot.idLot !== undefined &&
-                            handleAlertEditLot(lot.idLot)
+                            Supply.idSupply !== undefined &&
+                            handleEditSupply(Supply.idSupply)
                           }
                         >
                           <path
@@ -117,7 +117,7 @@ useEffect(() => {
                           />
                         </svg>
                       </button>
-                      <button>
+                      <button x-data="{ tooltip: 'Delete' }">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -127,8 +127,8 @@ useEffect(() => {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            lot.idLot !== undefined &&
-                            handleAlertDeleteLot(lot.idLot)
+                            Supply.idSupply !== undefined &&
+                            handleDeleteRow(Supply.idSupply)
                           }
                         >
                           <path
@@ -152,9 +152,8 @@ useEffect(() => {
           </tbody>
         </table>
       </div>
-
-      {/* Botones de paginación */}
-      <div className="flex justify-center mt-4">
+            {/* Botones de paginación */}
+            <div className="flex justify-center mt-4">
         <div
           className="
            inline-flex
@@ -228,6 +227,8 @@ useEffect(() => {
       </div>
     </>
   );
+  
+  
 }
 
 export default List;

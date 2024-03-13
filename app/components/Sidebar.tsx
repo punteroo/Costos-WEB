@@ -71,15 +71,7 @@ export default function Sidebar() {
     const stateToggleStored = localStorage.getItem("toggle");
     setToggleCollapseStored(stateToggleStored || 'true')
     setToggleCollapse(Boolean(toggleCollapseStored))
-    console.log(toggleCollapse)
-    console.log(toggleCollapseStored)
 
-    // console.log("el estado al iniciar: ", stateToggle);
-
-    // if (stateToggle === null) {
-    //   localStorage.setItem("toggle", "true");
-    //   setToggleCollapse(true);
-    // }
   }, []);
 
 
