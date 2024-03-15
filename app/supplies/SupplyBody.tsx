@@ -128,7 +128,7 @@ export default function SupplyBody() {
           <input
             type="text"
             className="input"
-            placeholder="Marca commercial"
+            placeholder="Marca Comercial"
             onChange={handlesetCommercialBrand}
           />
 

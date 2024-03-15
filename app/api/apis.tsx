@@ -1,7 +1,12 @@
 import axios, { AxiosError } from "axios";
-import { LaborInterface, LotInterface, RotationInterface, SupplyInterface } from "../components/interfaces/interface";
+import {
+  LaborInterface,
+  ListPriceInterface,
+  LotInterface,
+  RotationInterface,
+  SupplyInterface,
+} from "../components/interfaces/interface";
 import { alertRemoveError } from "../components/alerts/sweet";
-
 
 // LOTES
 export const postLot = async (lot: LotInterface) => {
@@ -57,17 +62,20 @@ export const deleteLot = async (id: number) => {
     );
 
     return result;
-  } catch (error:any) {
-    if (error instanceof AxiosError && error.response?.data.message === "Recurso no encontrado debido a una violación de clave foránea") {
+  } catch (error: any) {
+    if (
+      error instanceof AxiosError &&
+      error.response?.data.message ===
+        "Recurso no encontrado debido a una violación de clave foránea"
+    ) {
       // Manejar errores de Axios
-      alertRemoveError('El recurso no se puede eliminar por datos vinculados')
+      alertRemoveError("El recurso no se puede eliminar por datos vinculados");
     } else {
       // Manejar otros tipos de errores
       throw new Error(error);
     }
   }
 };
-
 
 // INSUMOS
 export const postSupply = async (Supply: SupplyInterface) => {
@@ -122,17 +130,20 @@ export const deleteSupply = async (id: number) => {
       `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_SUPPLY}${process.env.NEXT_PUBLIC_SUPPLY_DELETE}/${id}`
     );
     return result;
-  } catch (error:any) {
-    if (error instanceof AxiosError && error.response?.data.message === "Recurso no encontrado debido a una violación de clave foránea") {
+  } catch (error: any) {
+    if (
+      error instanceof AxiosError &&
+      error.response?.data.message ===
+        "Recurso no encontrado debido a una violación de clave foránea"
+    ) {
       // Manejar errores de Axios
-      alertRemoveError('El recurso no se puede eliminar por datos vinculados')
+      alertRemoveError("El recurso no se puede eliminar por datos vinculados");
     } else {
       // Manejar otros tipos de errores
       throw new Error(error);
     }
   }
 };
-
 
 // UNIDADES
 export const getAllUnits = async () => {
@@ -142,10 +153,23 @@ export const getAllUnits = async () => {
     );
     return result;
   } catch (error) {
-    console.error("Error al obtener las Unidades:", error);
+    console.error("Error al obtener las monedas:", error);
   }
 };
 
+
+// MONEDA
+
+export const getAllMoney = async () => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_SUPPLY}${process.env.NEXT_PUBLIC_MONEY_GETALL}`
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al obtener las Unidades:", error);
+  }
+};
 
 // ROTACIONES
 export const postRotation = async (object: RotationInterface) => {
@@ -200,17 +224,20 @@ export const deleteRotation = async (id: number) => {
       `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_ROTATION}${process.env.NEXT_PUBLIC_ROTATION_DELETE}/${id}`
     );
     return result;
-  } catch (error:any) {
-    if (error instanceof AxiosError && error.response?.data.message === "Recurso no encontrado debido a una violación de clave foránea") {
+  } catch (error: any) {
+    if (
+      error instanceof AxiosError &&
+      error.response?.data.message ===
+        "Recurso no encontrado debido a una violación de clave foránea"
+    ) {
       // Manejar errores de Axios
-      alertRemoveError('El recurso no se puede eliminar por datos vinculados')
+      alertRemoveError("El recurso no se puede eliminar por datos vinculados");
     } else {
       // Manejar otros tipos de errores
       throw new Error(error);
     }
   }
 };
-
 
 // LABORES
 export const postLabor = async (object: LaborInterface) => {
@@ -265,13 +292,85 @@ export const deleteLabor = async (id: number) => {
       `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_LABOR}${process.env.NEXT_PUBLIC_LABOR_DELETE}/${id}`
     );
     return result;
-  } catch (error:any) {
-    if (error instanceof AxiosError && error.response?.data.message === "Recurso no encontrado debido a una violación de clave foránea") {
+  } catch (error: any) {
+    if (
+      error instanceof AxiosError &&
+      error.response?.data.message ===
+        "Recurso no encontrado debido a una violación de clave foránea"
+    ) {
       // Manejar errores de Axios
-      alertRemoveError('El recurso no se puede eliminar por datos vinculados')
+      alertRemoveError("El recurso no se puede eliminar por datos vinculados");
     } else {
       // Manejar otros tipos de errores
       throw new Error(error);
+    }
+  }
+};
+
+// LISTA DE PRECIOS
+export const postListPrice = async (object: ListPriceInterface) => {
+  try {
+    const result = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_LIST_PRICE}${process.env.NEXT_PUBLIC_LIST_PRICE_POST}`,
+      object
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al cargar la lista de precios:", error);
+  }
+};
+
+export const editListPrice = async (id: number, object: ListPriceInterface) => {
+  try {
+    const result = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_LIST_PRICE}${process.env.NEXT_PUBLIC_LIST_PRICE_EDIT}/${id}`,
+      object
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al editar la lista de precios:", error);
+  }
+};
+
+export const getAllListPrice = async () => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_LIST_PRICE}${process.env.NEXT_PUBLIC_LIST_PRICE_GETALL}`
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al obtener la lista de precios:", error);
+  }
+};
+
+export const getOneListPrice = async (idLabor: number) => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_LIST_PRICE}${process.env.NEXT_PUBLIC_LIST_PRICE_GETONE}/${idLabor}`
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al obtener la un precio de la lista:", error);
+  }
+};
+
+export const deleteListPrice = async (id: number) => {
+  try {
+    const result = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_LIST_PRICE}${process.env.NEXT_PUBLIC_LIST_PRICE_DELETE}/${id}`
+    );
+    return result;
+  } catch (error: any) {
+    if (
+      error instanceof AxiosError &&
+      error.response?.data.message ===
+        "Recurso no encontrado debido a una violación de clave foránea"
+    ) {
+      // Manejar errores de Axios
+      alertRemoveError("El recurso no se puede eliminar por datos vinculados");
+    } else {
+      // Manejar otros tipos de errores
+      console.error("Error al eliminar insumo de la lista:", error);
     }
   }
 };

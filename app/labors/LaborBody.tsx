@@ -37,7 +37,7 @@ export default function LaborBody() {
   const [rotation, setRotation] = useState(0);
   // const [date, setDate] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [dateFormated, setDateFormated] = useState(moment(selectedDate).format("DD/MM/YYYY HH:mm:ss"))
+  const [dateFormated, setDateFormated] = useState(moment(selectedDate).format("DD/MM/YYYY"))
 
   const [commercialBrand, setCommercialBrand] = useState("");
   const [dose, setDose] = useState(0);
@@ -106,7 +106,7 @@ export default function LaborBody() {
   };
 
   const handleSetDate = (selectedDate: Date | null) => {
-    const formatDate = moment(selectedDate).format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+    const formatDate = moment(selectedDate).format("DD/MM/YYYY"); // Obtener la fecha actual formateada
     setDateFormated(formatDate);
   };
 
@@ -214,6 +214,7 @@ export default function LaborBody() {
               onChange={handleSetDate}
               dateFormat="dd/MM/yyyy"
               placeholderText="Seleccione una fecha"
+              value={dateFormated}
             />
           </div>
 

@@ -59,3 +59,21 @@ export interface UnitSupplyInterface {
     idUnit: number,
     description: string
 }
+
+
+
+export interface ListPriceInterface {
+    idListPrice?: number,
+    commercialBrand?: string,
+    campaign?: string,
+    idMoney?:number,
+    price?: number,
+    idUnit?: number;
+    createdAt?: string
+    updatedAt?: string
+}
+
+export interface MoneyInterface {
+    idMoney?: number,
+    description?: string,
+}

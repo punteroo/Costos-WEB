@@ -30,7 +30,7 @@ const menuItems: MenuItem[] = [
   { id: 3, label: "Insumos", icon: faBoxesPacking, link: "/supplies" },
   { id: 4, label: "Rotacion", icon: faArrowsSpin, link: "/rotations" },
   { id: 5, label: "Labores", icon: faList, link: "/labors" },
-  { id: 6, label: "P.Insumos", icon: faDollarSign, link: "/priceSupplies" },
+  { id: 6, label: "L. de Precios", icon: faDollarSign, link: "/listPrice" },
   { id: 7, label: "Costos", icon: faArrowTrendDown, link: "/costs" },
   {
     id: 8,
@@ -43,7 +43,7 @@ const menuItems: MenuItem[] = [
 
 export default function Sidebar() {
   const [toggleCollapse, setToggleCollapse] = useState<Boolean | undefined>(); // estado del toggle
-  const [toggleCollapseStored, setToggleCollapseStored] = useState(''); // estado del toggle
+  const [toggleCollapseStored, setToggleCollapseStored] = useState(""); // estado del toggle
 
   // funcion para el logo
   const Logo = () => {
@@ -69,14 +69,11 @@ export default function Sidebar() {
   // use Effect
   useEffect(() => {
     const stateToggleStored = localStorage.getItem("toggle");
-    setToggleCollapseStored(stateToggleStored || 'true')
-    setToggleCollapse(Boolean(toggleCollapseStored))
-
+    setToggleCollapseStored(stateToggleStored || "true");
+    setToggleCollapse(Boolean(toggleCollapseStored));
   }, []);
 
-
   return (
-
     // boton sidebar
     <div
       className={`h-screen overflow-auto flex flex-col border-r ${
@@ -85,13 +82,13 @@ export default function Sidebar() {
       style={{ transition: "width 300ms cubic-bezier(0.2, 0, 0, 1) 0s" }}
     >
       <div
-      className="group flex items-center justify-between min-h-[120px] border-b px-2 cursor-pointer"
-      onClick={() => {
-      // aca esta listo, presiono el boton y me recupera el estado anterior
-      // y el segundo setea el estado nuevo en local
-      setToggleCollapse((prevState) => !prevState);
-      // localStorage.setItem('toggle',toggleCollapse.toString())
-      }}
+        className="group flex items-center justify-between min-h-[120px] border-b px-2 cursor-pointer"
+        onClick={() => {
+          // aca esta listo, presiono el boton y me recupera el estado anterior
+          // y el segundo setea el estado nuevo en local
+          setToggleCollapse((prevState) => !prevState);
+          // localStorage.setItem('toggle',toggleCollapse.toString())
+        }}
       >
         <div className="flex items-center gap-2">
           {/* logo */}
@@ -130,25 +127,20 @@ export default function Sidebar() {
         className="w-full h-full overflow-auto"
         onClick={() => {
           const storedToggle = Boolean(localStorage.getItem("toggle"));
-          if (storedToggle ==! toggleCollapse) {
-            // alert(storedToggle)
-            
+          if (storedToggle == !toggleCollapse) {
           }
-
         }}
       >
         {menuItems.map(({ id, label, icon: itemIcon, link }) => (
           <Link key={id} href={link}>
             <div className="group flex gap-2 items-center px-2 mx-auto hover:bg-slate-100 transition-all duration-300 h-20">
               <div>
-              
                 <FontAwesomeIcon
                   className="opacity-50 group-hover:opacity-100 transition-all"
                   icon={itemIcon}
                   color="black"
                   style={{ width: "2.5rem" }}
                   onClick={(e) => {
-                    {alert('icono')}
                     e.stopPropagation(); // Evitar la propagación del evento al contenedor Link
                     setToggleCollapse((prevState) => !prevState);
                   }}
