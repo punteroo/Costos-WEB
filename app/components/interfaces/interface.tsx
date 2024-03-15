@@ -33,10 +33,10 @@ export interface CostInterface {
 }
 
 export interface LaborInterface {
-    date: Date,
-    comercialMark: string,
+    date: string,
+    commercialBrand: string | undefined,
     dose: number,
-    unit: string,
+    idUnit: number,
     idRotation: number,
     idLot: number
     createdAt?: string

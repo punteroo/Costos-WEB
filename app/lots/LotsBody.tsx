@@ -78,7 +78,6 @@ export default function LotsBody() {
         
       }
     } catch (error) {
-      console.log('paso por aca')
       throw new Error(`Error al cargar el Lote: ${error}`);
     }
   };

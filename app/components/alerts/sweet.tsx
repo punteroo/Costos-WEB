@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { LotInterface, RotationInterface, SupplyInterface, UnitSupplyInterface } from "../interfaces/interface";
+import { LaborInterface, LotInterface, RotationInterface, SupplyInterface, UnitSupplyInterface } from "../interfaces/interface";
 import {
   getOneLot,
   editLot,
@@ -11,7 +11,10 @@ import {
   getOneRotation,
   getAllLots,
   editRotation,
-  deleteRotation
+  deleteRotation,
+  getOneLabor,
+  editLabor,
+  deleteLabor
 } from "@/app/api/apis";
 
 const MySwal = withReactContent(Swal);
@@ -168,6 +171,9 @@ export const alertDeleteLot = async (id: number, param1: string) => {
   }
 };
 
+
+
+
 /* INSUMOS */
 
 // Editar un Insumo
@@ -186,7 +192,7 @@ export const alertPatchSupply = async (id: number, param1: string, units: UnitSu
         <input type="text" id="subCategory" class="inputEdit" value="${objeto.subCategory}">
         <label for="family">Familia</label>
         <input type="text" id="family" class="inputEdit" value="${objeto.family}">
-        <label for="commercialBrand">Marca Comercial</label>
+        <label for="commercialBrand">Marca commercial</label>
         <input type="text" id="commercialBrand" class="inputEdit" value="${objeto.commercialBrand}">
         <label for="unit">Unidad</label>
         <select id="unit" class="inputEdit">
@@ -288,9 +294,12 @@ export const alertDeleteSupply = async (id: number, param1: string) => {
 };
 
 
+
+
+
 /* ROTACION */
 
-// Editar un Insumo
+// Editar una Rotacion
 export const alertPatchRotation= async (id: number, param1: string, lots: LotInterface[]) => {
   try {
     const [responseRotation, responseAllLots] = await Promise.all([getOneRotation(id),getAllLots()])
@@ -298,7 +307,6 @@ export const alertPatchRotation= async (id: number, param1: string, lots: LotInt
 
     const objetoRotation: RotationInterface | undefined = responseRotation?.data;
     const objetoLots: LotInterface[] | undefined = responseAllLots?.data;
-    console.log(objetoRotation?.state)
     if (objetoRotation) {
       Swal.fire({
         title: "Editar Objeto",
@@ -377,7 +385,7 @@ export const alertPatchRotation= async (id: number, param1: string, lots: LotInt
 };
 
 
-// Eliminar un registro
+// Eliminar una Rotacion
 export const alertDeleteRotation = async (id: number, param1: string) => {
   try {
     await Swal.fire({
@@ -392,6 +400,145 @@ export const alertDeleteRotation = async (id: number, param1: string) => {
       if (result.isConfirmed) {
         try {
           const resultDelete = await deleteRotation(id);
+          if (resultDelete?.status === 200) {
+            Swal.fire({
+              title: "Eliminado",
+              text: `El ${param1} ha sido eliminado`,
+              icon: "success",
+            });
+          }
+        } catch (error) {
+          throw new Error(`Error al intentar eliminar el ${param1}: ${error}`);
+        }
+      }
+    });
+  } catch (error) {
+   throw new Error(`Error en el método de eliminar ${param1}: ${error}`);
+  }
+};
+
+
+
+
+
+/* LABOR */
+
+// Editar un labor
+export const alertPatchLabor = async (id: number, param1: string, lots: LotInterface[], rotations: RotationInterface[], allUnits:UnitSupplyInterface[]) => {
+  try {
+    const responseLabor = await getOneLabor(id)
+    const objetoLabor: LaborInterface | undefined = responseLabor?.data;
+
+
+    // const objetoLots: LotInterface[] | undefined = responseAllLots?.data;
+
+    if (objetoLabor) {
+      Swal.fire({
+        title: "Editar Objeto",
+        html: `
+        <label for="lot">Lote</label>   
+        <select id="lot" class="inputEdit">
+        ${lots?.map((option) => `
+          <option value="${option.idLot}" ${objetoLabor.idLot === option.idLot ? 'selected' : ''}>${option.businessName} - ${option.establishment} - ${option.lot}</option>
+        `).join('')}
+        </select>
+        <label for="rotation">Rotacion</label>   
+        <select id="rotation" class="inputEdit">
+        ${rotations?.map((option) => `
+          <option value="${option.idRotation}" ${objetoLabor.idRotation === option.idRotation ? 'selected' : ''}>${option.campaign} - ${option.epoch} - ${option.crop}</option>
+        `).join('')}
+        </select>
+        
+        <label for="date">Fecha</label>
+        <input type="Date" id="date" class="inputEdit" value="${objetoLabor.date}">
+        <label for="commercialBrand">Marca Comercial</label>
+        <input type="text" id="commercialBrand" class="inputEdit" value="${objetoLabor.commercialBrand}">
+        <label for="dose">Dosis (x ha)</label>
+        <input type="text" id="dose" class="inputEdit" value="${objetoLabor.dose}">
+        <label for="unit">Unidad</label>   
+        <select id="unit" class="inputEdit">
+        ${allUnits?.map((option) => `
+          <option value="${option.idUnit}" ${objetoLabor.idUnit === option.idUnit ? 'selected' : ''}>${option.description}</option>
+        `).join('')}
+        </select>
+  
+        `,
+        showCancelButton: true,
+        confirmButtonText: "Guardar Cambios",
+        cancelButtonText: "Cancelar",
+        preConfirm: async () => {
+          // Obtén los valores de los campos de manera segura
+          const lotInput = Swal.getPopup()?.querySelector<HTMLInputElement>("#lot");
+          const rotationInput = Swal.getPopup()?.querySelector<HTMLInputElement>("#rotation");
+          const dateInput = Swal.getPopup()?.querySelector<HTMLInputElement>("#date");
+          const commercialBrandInput =  Swal.getPopup()?.querySelector<HTMLInputElement>("#commercialBrand");
+          const doseInput = Swal.getPopup()?.querySelector<HTMLInputElement>("#dose");
+          const unitInput = Swal.getPopup()?.querySelector<HTMLInputElement>("#unit");
+          
+          
+          
+          
+          const idLot = Number(lotInput?.value);
+          const idRotation = Number(rotationInput?.value);
+          const date = dateInput?.value;
+          const formattedDate = moment(date).format("DD/MM/YYYY HH:mm:ss");
+          const commercialBrand = commercialBrandInput?.value;
+          const idUnit = Number(unitInput?.value);
+          const dose = Number(doseInput?.value);
+          
+          const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+          
+
+          const object: LaborInterface = {
+            date:formattedDate,
+            commercialBrand,
+            dose,
+            idUnit,
+            idRotation,
+            idLot,
+            updatedAt: currentDate
+          };
+
+          const finalPatch = Object.fromEntries(
+            Object.entries(object).filter(([key, value]) => value !== "")
+          );
+            
+          try {
+            const result = await editLabor(id, finalPatch as LaborInterface);
+
+
+            alertAddOk(`El ${param1} se modifico con exito`);
+
+            return result?.data;
+          } catch (error) {
+            console.error(
+              `error al intentar realizar el patch en ${param1}: ${error}`
+            );
+          }
+        },
+      });
+    }
+  } catch (error) {
+    throw new Error(`Error en el método de patch ${param1}: ${error}`);
+  }
+};
+
+
+// Eliminar una Rotacion
+export const alertDeleteLabor = async (id: number, param1: string) => {
+  try {
+    await Swal.fire({
+      title: "¿Confirma la Eliminación?",
+      text: "Este proceso no tiene retorno",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DC143C",
+      cancelButtonColor: "#DCDCDC",
+      confirmButtonText: "Eliminar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const resultDelete = await deleteLabor(id);
           if (resultDelete?.status === 200) {
             Swal.fire({
               title: "Eliminado",

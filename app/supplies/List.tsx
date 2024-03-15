@@ -76,7 +76,7 @@ useEffect(() => {
                 Familia
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Marca Comercial
+                Marca commercial
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
                 Unidad
@@ -87,9 +87,9 @@ useEffect(() => {
             {currentItems && currentItems.length > 0 ? (
               currentItems.map((Supply: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-50">
-                  <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
+                  <td className="flex gap-3 px-6 py-4 font-normal text-gray-900">
                     <div className="text-sm">{Supply.category}</div>
-                  </th>
+                  </td>
                   <td className="px-6 py-4">{Supply.subCategory}</td>
                   <td className="px-6 py-4">{Supply.family}</td>
                   <td className="px-6 py-4">{Supply.commercialBrand}</td>

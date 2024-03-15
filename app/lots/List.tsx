@@ -85,9 +85,9 @@ useEffect(() => {
             {currentItems && currentItems.length > 0 ? (
               currentItems.map((lot: LotInterface, index: number) => (
                 <tr key={index} className="hover:bg-gray-50">
-                  <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
+                  <td className="flex gap-3 px-6 py-4 font-normal text-gray-900">
                     <div className="text-sm">{lot.businessName}</div>
-                  </th>
+                  </td>
                   <td className="px-6 py-4">{lot.establishment}</td>
                   <td className="px-6 py-4">{lot.lot}</td>
                   <td className="px-6 py-4">{lot.surface}</td>
