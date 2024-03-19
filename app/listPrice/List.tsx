@@ -1,64 +1,76 @@
 import React, { useState, useEffect } from "react";
-import { RotationInterface } from "../components/interfaces/interface";
-import {  alertDeleteRotation, alertPatchRotation } from "../components/alerts/sweet";
-import { LotInterface } from "../components/interfaces/interface";
+import {
+  RotationInterface,
+  UnitSupplyInterface,
+  ListPriceInterface,
+  MoneyInterface,
+  SupplyInterface,
+} from "../components/interfaces/interface";
+import {
+  alertDeleteListPrice,
+  alertPatchListPrice,
+} from "../components/alerts/sweet";
 
-// quede aca en el alert}
+// quede aca en el alert
 interface ListProps {
-  filtered: RotationInterface[];
-  lots: LotInterface[];
+  filtered: ListPriceInterface[];
+  allSupplies: SupplyInterface[];
+  allUnits: UnitSupplyInterface[];
+  allRotations: RotationInterface[];
+  allMoney: MoneyInterface[];
 }
 
+function List({
+  filtered,
+  allSupplies,
+  allUnits,
+  allRotations,
+  allMoney,
+}: ListProps) {
+  // paginado
+  const itemsPerPage = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentItems, setCurrentItems] = useState<ListPriceInterface[]>([]);
+  const [maximum, setMaximum] = useState(1);
+  const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
-function List({ filtered, lots }: ListProps) {
-  
-  
- // paginado
-const itemsPerPage = 4;
-const [currentPage, setCurrentPage] = useState(1);
-const [currentItems, setCurrentItems] = useState<RotationInterface[]>([]);
-const [maximum, setMaximum] = useState(1);
-const [pageNumbers, setPageNumbers] = useState<number[]>([]);
+  useEffect(() => {
+    if (filtered) {
+      // Calcula el índice de inicio y fin de la página actual
+      const indexOfLastItem = currentPage * itemsPerPage;
+      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+      const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
+      setCurrentItems(currentItems);
 
-useEffect(() => {
-  if (filtered) {
-    // Calcula el índice de inicio y fin de la página actual
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
-    setCurrentItems(currentItems);
-  
-    const newPageNumbers = [];
-    for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
-      newPageNumbers.push(i);
+      const newPageNumbers = [];
+      for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
+        newPageNumbers.push(i);
+      }
+      setPageNumbers(newPageNumbers);
+
+      const maximum = Math.max(...newPageNumbers, 1);
+      setMaximum(maximum);
     }
-    setPageNumbers(newPageNumbers);
-  
-    const maximum = Math.max(...newPageNumbers, 1);
-    setMaximum(maximum);
-  }
-}, [currentPage, filtered, itemsPerPage]);
-
+  }, [currentPage, filtered, itemsPerPage]);
 
   // handlers
-  const handleEditRotation = (idRotation: number) => {
-    alertPatchRotation(
-      idRotation,
-      "Rotacion",
-      lots
+  const handleEditRow = (id: number) => {
+    alertPatchListPrice(
+      id,
+      "Lista de Precios",
+      allSupplies,
+      allUnits,
+      allRotations,
+      allMoney
     );
   };
-  const handleDeleteRow = async (idRotation: number) => {
+  const handleDeleteRow = async (idLabor: number) => {
     try {
-      await alertDeleteRotation(
-        idRotation,
-        "Rotacion"
-      );
+      await alertDeleteListPrice(idLabor, "Lista de Precios");
     } catch (error) {
       console.error(error);
     }
   };
-
 
   return (
     <>
@@ -66,37 +78,35 @@ useEffect(() => {
         <table className="w-full border-collapse bg-white text-left text-xs lg:text-sm text-gray-500">
           <thead className="bg-gray-50">
             <tr>
-            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Lote
+              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                Marca Comercial
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
                 Campaña
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Epoca
+                Precio
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Cosecha
+                Moneda
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Estado
+                Unidad
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 border-t border-gray-100 text-left">
             {currentItems && currentItems.length > 0 ? (
-              currentItems.map((rotation: any, index: number) => (
+              currentItems.map((item: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-50">
-                  <td className="flex gap-3 px-6 py-4 font-normal text-gray-900">
-                    <div className="text-sm">{rotation.idLot.businessName} - {rotation.idLot.establishment} - {rotation.idLot.lot}</div>
-                  </td>
-                  <td className="px-6 py-4">{rotation.campaign}</td>
-                  <td className="px-6 py-4">{rotation.epoch}</td>
-                  <td className="px-6 py-4">{rotation.crop}</td>
-                  <td>{rotation.state}</td>
+                  <td className="px-6 py-4">{item.commercialBrand}</td>
+                  <td className="px-6 py-4">{item.campaign}</td>
+                  <td className="px-6 py-4">{`$ ${item.price}`}</td>
+                  <td className="px-6 py-4">{item.idMoney.description}</td>
+                  <td className="px-6 py-4">{item.idUnit.description}</td>
                   <td className="px-6 py-4">
                     <div className="flex justify-end gap-4">
-                      <button x-data="{ tooltip: 'Edite' }">
+                      <button>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -106,8 +116,8 @@ useEffect(() => {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            rotation.idRotation !== undefined &&
-                            handleEditRotation(rotation.idRotation)
+                            item.idListPrice !== undefined &&
+                            handleEditRow(item.idListPrice)
                           }
                         >
                           <path
@@ -117,7 +127,7 @@ useEffect(() => {
                           />
                         </svg>
                       </button>
-                      <button x-data="{ tooltip: 'Delete' }">
+                      <button>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -127,8 +137,8 @@ useEffect(() => {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            rotation.idRotation !== undefined &&
-                            handleDeleteRow(rotation.idRotation)
+                            item.idListPrice !== undefined &&
+                            handleDeleteRow(item.idListPrice)
                           }
                         >
                           <path
@@ -152,8 +162,8 @@ useEffect(() => {
           </tbody>
         </table>
       </div>
-            {/* Botones de paginación */}
-            <div className="flex justify-center mt-4">
+      {/* Botones de paginación */}
+      <div className="flex justify-center mt-4">
         <div
           className="
            inline-flex
@@ -227,8 +237,6 @@ useEffect(() => {
       </div>
     </>
   );
-  
-  
 }
 
 export default List;

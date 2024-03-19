@@ -1,11 +1,13 @@
+import { LaborTitleIcon } from "../assets/icons/TitleIcon";
 import Layout from "../components/Layout";
+import SectionTitle from "../components/section-title";
+import LaborBody from "./LaborBody";
 
-export default function Labors() {
+export default function Labor() {
   return (
-    <>
-      <Layout>
-        <div>Labors</div>
-      </Layout>
-    </>
+    <Layout>
+      <SectionTitle title="Labores" icon={<LaborTitleIcon />} />
+      <LaborBody />
+    </Layout>
   );
 }

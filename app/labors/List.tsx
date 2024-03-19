@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { RotationInterface } from "../components/interfaces/interface";
-import {  alertDeleteRotation, alertPatchRotation } from "../components/alerts/sweet";
-import { LotInterface } from "../components/interfaces/interface";
+import { RotationInterface, LaborInterface, LotInterface, UnitSupplyInterface } from "../components/interfaces/interface";
+import {  alertDeleteLabor, alertDeleteRotation, alertPatchLabor, alertPatchRotation } from "../components/alerts/sweet";
 
-// quede aca en el alert}
+
+// quede aca en el alert
 interface ListProps {
-  filtered: RotationInterface[];
-  lots: LotInterface[];
+  filtered: LaborInterface[];
+  allLots: LotInterface[];
+  allRotations: RotationInterface[];
+  allUnits: UnitSupplyInterface[];
 }
 
 
-function List({ filtered, lots }: ListProps) {
+function List({ filtered, allLots, allRotations, allUnits }: ListProps) {
   
   
  // paginado
 const itemsPerPage = 4;
 const [currentPage, setCurrentPage] = useState(1);
-const [currentItems, setCurrentItems] = useState<RotationInterface[]>([]);
+const [currentItems, setCurrentItems] = useState<LaborInterface[]>([]);
 const [maximum, setMaximum] = useState(1);
 const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
@@ -27,6 +29,7 @@ useEffect(() => {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
     setCurrentItems(currentItems);
+
   
     const newPageNumbers = [];
     for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
@@ -41,17 +44,19 @@ useEffect(() => {
 
 
   // handlers
-  const handleEditRotation = (idRotation: number) => {
-    alertPatchRotation(
-      idRotation,
+  const handleEditRow = (idLabor: number) => {
+    alertPatchLabor(
+      idLabor,
       "Rotacion",
-      lots
+      allLots,
+      allRotations,
+      allUnits
     );
   };
-  const handleDeleteRow = async (idRotation: number) => {
+  const handleDeleteRow = async (idLabor: number) => {
     try {
-      await alertDeleteRotation(
-        idRotation,
+      await alertDeleteLabor(
+        idLabor,
         "Rotacion"
       );
     } catch (error) {
@@ -70,33 +75,35 @@ useEffect(() => {
                 Lote
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Campaña
+                Rotacion
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Epoca
+                Fecha
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Cosecha
+                Marca Comercial
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Estado
+                Dosis
+              </th>
+              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                Unidad
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 border-t border-gray-100 text-left">
             {currentItems && currentItems.length > 0 ? (
-              currentItems.map((rotation: any, index: number) => (
+              currentItems.map((labor: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-50">
-                  <td className="flex gap-3 px-6 py-4 font-normal text-gray-900">
-                    <div className="text-sm">{rotation.idLot.businessName} - {rotation.idLot.establishment} - {rotation.idLot.lot}</div>
-                  </td>
-                  <td className="px-6 py-4">{rotation.campaign}</td>
-                  <td className="px-6 py-4">{rotation.epoch}</td>
-                  <td className="px-6 py-4">{rotation.crop}</td>
-                  <td>{rotation.state}</td>
+                  <td className="px-6 py-4">{labor.idLot.businessName} - {labor.idLot.establishment} - {labor.idLot.lot}</td>
+                  <td className="px-6 py-4">{labor.idRotation.campaign} - {labor.idRotation.epoch} - {labor.idRotation.crop}</td>
+                  <td className="px-6 py-4">{labor.date}</td>
+                  <td className="px-6 py-4">{labor.commercialBrand}</td>
+                  <td className="px-6 py-4">{labor.dose}</td>
+                  <td className="px-6 py-4">{labor.idUnit.description}</td>
                   <td className="px-6 py-4">
                     <div className="flex justify-end gap-4">
-                      <button x-data="{ tooltip: 'Edite' }">
+                      <button>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -106,8 +113,8 @@ useEffect(() => {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            rotation.idRotation !== undefined &&
-                            handleEditRotation(rotation.idRotation)
+                            labor.idLabor !== undefined &&
+                            handleEditRow(labor.idLabor )
                           }
                         >
                           <path
@@ -117,7 +124,7 @@ useEffect(() => {
                           />
                         </svg>
                       </button>
-                      <button x-data="{ tooltip: 'Delete' }">
+                      <button>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -127,8 +134,8 @@ useEffect(() => {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            rotation.idRotation !== undefined &&
-                            handleDeleteRow(rotation.idRotation)
+                            labor.idLabor !== undefined &&
+                            handleDeleteRow(labor.idLabor)
                           }
                         >
                           <path

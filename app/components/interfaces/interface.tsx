@@ -7,6 +7,8 @@ export interface LotInterface {
     latitude?: number;
     length?: number;
     condition?: string;
+    createdAt?: string
+    updatedAt?: string
 }
 
 export interface SupplyInterface {
@@ -16,23 +18,30 @@ export interface SupplyInterface {
     family?: string,
     commercialBrand?: string,
     idUnit?: number;
+    createdAt?: string
+    updatedAt?: string
 }
 
 
 export interface CostInterface {
-    money: string,
+    date: string,
+    idSupply: number,
+    idMoney: number,
     price: number,
-    cant: number,
-    idSupply: number
+    quantity: number,
+    createdAt?: string
+    updatedAt?: string
 }
 
 export interface LaborInterface {
-    date: Date,
-    comercialMark: string,
+    date: string,
+    commercialBrand: string | undefined,
     dose: number,
-    unit: string,
+    idUnit: number,
     idRotation: number,
     idLot: number
+    createdAt?: string
+    updatedAt?: string
 }
 
 
@@ -43,9 +52,29 @@ export interface RotationInterface {
     crop?: string,
     state?: string,
     idLot?: number
+    createdAt?: string
+    updatedAt?: string
 }
 
 export interface UnitSupplyInterface {
     idUnit: number,
     description: string
+}
+
+
+
+export interface ListPriceInterface {
+    idListPrice?: number,
+    commercialBrand?: string,
+    campaign?: string,
+    idMoney?:number,
+    price?: number,
+    idUnit?: number;
+    createdAt?: string
+    updatedAt?: string
+}
+
+export interface MoneyInterface {
+    idMoney?: number,
+    description?: string,
 }

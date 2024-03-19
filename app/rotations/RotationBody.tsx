@@ -9,6 +9,9 @@ import {
   RotationInterface,
 } from "../components/interfaces/interface";
 
+import moment from "moment";
+
+
 export default function RotationBody() {
   // hooks states
   const [AllLots, setAllLots] = useState([]);
@@ -38,7 +41,6 @@ export default function RotationBody() {
     const found: LotInterface | undefined = AllLots.find(
       (lot: LotInterface) => lot.idLot === Number(value)
     );
-    console.log(found);
     if (found) {
       const { idLot } = found;
       setLot(Number(idLot));
@@ -66,12 +68,17 @@ export default function RotationBody() {
   const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+
+
     const Object: RotationInterface = {
       campaign,
       epoch,
       crop,
       state,
       idLot: lot,
+      createdAt: currentDate,
+      updatedAt: currentDate,
     };
 
     try {
@@ -79,7 +86,7 @@ export default function RotationBody() {
 
       // Verifica si result es undefined antes de acceder a sus propiedades
       if (result && result.status === 201) {
-        alertAddOk("Campaña cargada con éxito");
+        alertAddOk("Rotacion cargada con éxito");
         setLot(0);
         setCampaign("");
         setEpoch("");
@@ -101,7 +108,7 @@ export default function RotationBody() {
             defaultValue={"Seleccione un Lote"}
           >
             <option disabled>Seleccione un Lote</option>
-            {AllLots.map((item: LotInterface) => (
+            {AllLots && AllLots.map((item: LotInterface) => (
               <option key={item.idLot} value={item.idLot}>
                 {`${item.businessName} - ${item.establishment} - ${item.lot}`}
               </option>

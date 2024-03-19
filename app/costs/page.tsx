@@ -1,11 +1,13 @@
+import { CostTitleIcon } from "../assets/icons/TitleIcon";
 import Layout from "../components/Layout";
+import SectionTitle from "../components/section-title";
+import CostBody from "./CostBody";
 
-export default function Costs() {
+export default function Cost() {
   return (
-    <>
-      <Layout>
-        <div>Costs</div>
-      </Layout>
-    </>
+    <Layout>
+      <SectionTitle title="Costos" icon={<CostTitleIcon />} />
+      <CostBody />
+    </Layout>
   );
 }
