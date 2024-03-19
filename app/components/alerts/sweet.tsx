@@ -127,17 +127,17 @@ export const alertPatchLot = async (id: number, param1: string) => {
           const condition = conditionInput?.value;
 
           const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
-          const finalSurface= Number(surface.toFixed(2))
-          const finalLatitude= Number(latitude.toFixed(2))
-          const finalLength= Number(length.toFixed(2))
-          
+          const finalSurface = Number(surface.toFixed(2));
+          const finalLatitude = Number(latitude.toFixed(2));
+          const finalLength = Number(length.toFixed(2));
+
           const lotObject = {
             businessName,
             establishment,
             lot,
-            surface:finalSurface,
-            latitude:finalLatitude,
-            length:finalLength,
+            surface: finalSurface,
+            latitude: finalLatitude,
+            length: finalLength,
             condition,
             updatedAt: currentDate,
           };
@@ -490,8 +490,6 @@ export const alertPatchLabor = async (
     const responseLabor = await getOneLabor(id);
     const objetoLabor: LaborInterface | undefined = responseLabor?.data;
 
-    // const objetoLots: LotInterface[] | undefined = responseAllLots?.data;
-
     if (objetoLabor) {
       Swal.fire({
         title: "Editar Objeto",
@@ -572,18 +570,17 @@ export const alertPatchLabor = async (
           const idLot = Number(lotInput?.value);
           const idRotation = Number(rotationInput?.value);
           const date = dateInput?.value;
-          // const formattedDate = moment(date).format("DD/MM/YYYY HH:mm:ss");
           const commercialBrand = commercialBrandInput?.value;
           const idUnit = Number(unitInput?.value);
           const dose = Number(doseInput?.value);
 
           const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
-          const finalDose= Number(dose.toFixed(2))
+          const finalDose = Number(dose.toFixed(2));
 
           const object: LaborInterface = {
             date: date || "",
             commercialBrand,
-            dose:finalDose,
+            dose: finalDose,
             idUnit,
             idRotation,
             idLot,
@@ -645,7 +642,6 @@ export const alertDeleteLabor = async (id: number, param1: string) => {
   }
 };
 
-
 /* LISTA DE PRECIOS */
 
 // Editar un insumo dentro de la lista
@@ -673,7 +669,9 @@ export const alertPatchListPrice = async (
           ?.map(
             (option) => `
           <option value="${option.commercialBrand}" ${
-            objectResponse.commercialBrand === option.commercialBrand ? "selected" : ""
+              objectResponse.commercialBrand === option.commercialBrand
+                ? "selected"
+                : ""
             }>${option.commercialBrand}</option>
         `
           )
@@ -730,7 +728,9 @@ export const alertPatchListPrice = async (
         preConfirm: async () => {
           // Obtén los valores de los campos de manera segura
           const input1 =
-            Swal.getPopup()?.querySelector<HTMLInputElement>("#commercialBrand");
+            Swal.getPopup()?.querySelector<HTMLInputElement>(
+              "#commercialBrand"
+            );
           const input2 =
             Swal.getPopup()?.querySelector<HTMLInputElement>("#campaign");
           const input3 =
@@ -740,7 +740,6 @@ export const alertPatchListPrice = async (
           const input5 =
             Swal.getPopup()?.querySelector<HTMLInputElement>("#unit");
 
-
           const inputTransform1 = input1?.value;
           const inputTransform2 = input2?.value;
           const inputTransform3 = Number(input3?.value);
@@ -748,7 +747,7 @@ export const alertPatchListPrice = async (
           const inputTransform5 = Number(input5?.value);
 
           const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
-          const finalPrice= Number(inputTransform3.toFixed(2))
+          const finalPrice = Number(inputTransform3.toFixed(2));
 
           const object: ListPriceInterface = {
             commercialBrand: inputTransform1,
@@ -764,7 +763,10 @@ export const alertPatchListPrice = async (
           );
 
           try {
-            const result = await editListPrice(id, finalPatch as ListPriceInterface);
+            const result = await editListPrice(
+              id,
+              finalPatch as ListPriceInterface
+            );
 
             alertAddOk(`El ${param1} se modifico con exito`);
 
@@ -814,8 +816,6 @@ export const alertDeleteListPrice = async (id: number, param1: string) => {
   }
 };
 
-
-
 /* COSTOS */
 
 // Editar un costo
@@ -824,13 +824,11 @@ export const alertPatchCost = async (
   id: number,
   param1: string,
   allSupplies: SupplyInterface[],
-  allMoney: MoneyInterface[],
-
+  allMoney: MoneyInterface[]
 ) => {
   try {
     const response = await getOneCost(id);
     const objectResponse: CostInterface | undefined = response?.data;
-
 
     if (objectResponse) {
       Swal.fire({
@@ -848,7 +846,11 @@ export const alertPatchCost = async (
             ?.map(
               (option) => `
             <option value="${option.idSupply}" 
-            ${objectResponse.idSupply === Number(option.idSupply) ? "selected" : ""}>
+            ${
+              objectResponse.idSupply === Number(option.idSupply)
+                ? "selected"
+                : ""
+            }>
               ${option.category} - ${option.subCategory} - ${option.family}
             </option>`
             )
@@ -897,7 +899,6 @@ export const alertPatchCost = async (
           const input5 =
             Swal.getPopup()?.querySelector<HTMLInputElement>("#quantity");
 
-
           const inputTransform1 = input1?.value;
           const inputTransform2 = Number(input2?.value);
           const inputTransform3 = Number(input3?.value);
@@ -905,9 +906,8 @@ export const alertPatchCost = async (
           const inputTransform5 = Number(input5?.value);
 
           const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
-          const finalPrice= Number(inputTransform4.toFixed(2))
-          const finalQuantity= Number(inputTransform5.toFixed(2))
-
+          const finalPrice = Number(inputTransform4.toFixed(2));
+          const finalQuantity = Number(inputTransform5.toFixed(2));
 
           const object: CostInterface = {
             date: inputTransform1 || "",
@@ -941,7 +941,7 @@ export const alertPatchCost = async (
   }
 };
 
-// Eliminar un costo 
+// Eliminar un costo
 export const alertDeleteCost = async (id: number, param1: string) => {
   try {
     await Swal.fire({
@@ -973,8 +973,6 @@ export const alertDeleteCost = async (id: number, param1: string) => {
   }
 };
 
-
-
 /* PRECIO X GRANO */
 
 // Editar precio x Grano
@@ -982,13 +980,11 @@ export const alertDeleteCost = async (id: number, param1: string) => {
 export const alertPatchPriceGrain = async (
   id: number,
   param1: string,
-  allRotations: RotationInterface[],
-
+  allRotations: RotationInterface[]
 ) => {
   try {
     const response = await getOnePriceGrain(id);
     const objectResponse: PriceGrainInterface | undefined = response?.data;
-
 
     if (objectResponse) {
       Swal.fire({
@@ -1042,15 +1038,12 @@ export const alertPatchPriceGrain = async (
           const input3 =
             Swal.getPopup()?.querySelector<HTMLInputElement>("#price");
 
-
-
           const inputTransform1 = input1?.value;
           const inputTransform2 = input2?.value;
           const inputTransform3 = Number(input3?.value);
 
           const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
-          const finalPrice= Number(inputTransform3.toFixed(2))
-
+          const finalPrice = Number(inputTransform3.toFixed(2));
 
           const object: PriceGrainInterface = {
             campaign: inputTransform1,
@@ -1064,7 +1057,10 @@ export const alertPatchPriceGrain = async (
           );
 
           try {
-            const result = await editPriceGrain(id, finalPatch as PriceGrainInterface);
+            const result = await editPriceGrain(
+              id,
+              finalPatch as PriceGrainInterface
+            );
 
             alertAddOk(`El ${param1} se modifico con exito`);
 
@@ -1082,7 +1078,7 @@ export const alertPatchPriceGrain = async (
   }
 };
 
-// Eliminar un costo 
+// Eliminar un costo
 export const alertDeletePriceGrain = async (id: number, param1: string) => {
   try {
     await Swal.fire({
@@ -1114,8 +1110,6 @@ export const alertDeletePriceGrain = async (id: number, param1: string) => {
   }
 };
 
-
-
 /* PRODUCCION */
 
 // Editar produccion
@@ -1124,18 +1118,18 @@ export const alertPatchProduction = async (
   id: number,
   param1: string,
   allRotations: RotationInterface[],
-  allLots: LotInterface[],
-
+  allLots: LotInterface[]
 ) => {
   try {
     const response = await getOneProduction(id);
     const objectResponse: ProductionInterface | undefined = response?.data;
-    let arrayCampaigns = []
+    let arrayCampaigns = [];
 
     if (allRotations.length > 0) {
-      arrayCampaigns = Array.from(new Set(allRotations.map((value:any) => value.campaign)));
+      arrayCampaigns = Array.from(
+        new Set(allRotations.map((value: any) => value.campaign))
+      );
     }
-
 
     if (objectResponse) {
       Swal.fire({
@@ -1193,10 +1187,10 @@ export const alertPatchProduction = async (
             Swal.getPopup()?.querySelector<HTMLInputElement>("#campaign");
           const input3 =
             Swal.getPopup()?.querySelector<HTMLInputElement>("#productionTn");
-            const input4 =
-            Swal.getPopup()?.querySelector<HTMLInputElement>("#productionOptimum");
-
-
+          const input4 =
+            Swal.getPopup()?.querySelector<HTMLInputElement>(
+              "#productionOptimum"
+            );
 
           const inputTransform1 = Number(input1?.value);
           const inputTransform2 = input2?.value;
@@ -1204,9 +1198,8 @@ export const alertPatchProduction = async (
           const inputTransform4 = Number(input4?.value);
 
           const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
-          const finalProductionTn= Number(inputTransform3.toFixed(2))
-          const finalProductionOptimum= Number(inputTransform4.toFixed(2))
-
+          const finalProductionTn = Number(inputTransform3.toFixed(2));
+          const finalProductionOptimum = Number(inputTransform4.toFixed(2));
 
           const object: ProductionInterface = {
             idLot: inputTransform1,
@@ -1221,7 +1214,10 @@ export const alertPatchProduction = async (
           );
 
           try {
-            const result = await editProduction(id, finalPatch as ProductionInterface);
+            const result = await editProduction(
+              id,
+              finalPatch as ProductionInterface
+            );
 
             alertAddOk(`El ${param1} se modifico con exito`);
 
@@ -1239,7 +1235,7 @@ export const alertPatchProduction = async (
   }
 };
 
-// Eliminar un costo 
+// Eliminar una produccion
 export const alertDeleteProduction = async (id: number, param1: string) => {
   try {
     await Swal.fire({

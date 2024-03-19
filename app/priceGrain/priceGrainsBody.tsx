@@ -43,10 +43,15 @@ export default function PriceGrainBody() {
         setAllRotations(resultAllRotations);
         setAllPriceGrain(resultAllPriceGrain);
 
-        setAllCampaigns(Array.from(new Set(resultAllRotations.map((value: { campaign: any; }) => value.campaign))));
-
-
-
+        setAllCampaigns(
+          Array.from(
+            new Set(
+              resultAllRotations.map(
+                (value: { campaign: any }) => value.campaign
+              )
+            )
+          )
+        );
       } catch (error) {
         throw new Error(`Error al obtener el Precio por : ${error}`);
       }
@@ -62,9 +67,7 @@ export default function PriceGrainBody() {
     );
 
     if (found.length > 0) {
-
       const { campaign } = found[0];
-      console.log('campaña: ', campaign)
       setCampaign(campaign || "");
       setAllCrops([]);
 
@@ -75,7 +78,6 @@ export default function PriceGrainBody() {
         }
       });
 
-      (arrayCrop)
       setAllCrops(arrayCrop);
     } else {
       throw new Error("Campaña no encontrada");
@@ -88,7 +90,6 @@ export default function PriceGrainBody() {
     );
 
     if (found) {
-      console.log('cultivo: ', found)
       setCrop(found);
     } else {
       throw new Error("Cultivo no encontrado");
@@ -103,7 +104,7 @@ export default function PriceGrainBody() {
     e.preventDefault();
 
     const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
-    const finalPrice = Number(price.toFixed(2))
+    const finalPrice = Number(price.toFixed(2));
 
     const Object: PriceGrainInterface = {
       campaign,
@@ -128,13 +129,10 @@ export default function PriceGrainBody() {
     }
   };
 
-
   return (
     <>
       <div className="space-y-4 px-6">
         <div className="card grid grid-cols-4 gap-4 mt-4">
-
-          
           {/* Campaña */}
           <select
             onInput={(e) =>

@@ -11,7 +11,6 @@ import {
 
 import moment from "moment";
 
-
 export default function RotationBody() {
   // hooks states
   const [AllLots, setAllLots] = useState([]);
@@ -20,7 +19,6 @@ export default function RotationBody() {
   const [epoch, setEpoch] = useState("");
   const [crop, setCrop] = useState("");
   const [state, setState] = useState("Activo");
-  // const [unit, setUnit] = useState(0);
 
   // useEffect para traer info de las apis
   useEffect(() => {
@@ -70,7 +68,6 @@ export default function RotationBody() {
 
     const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
 
-
     const Object: RotationInterface = {
       campaign,
       epoch,
@@ -108,11 +105,12 @@ export default function RotationBody() {
             defaultValue={"Seleccione un Lote"}
           >
             <option disabled>Seleccione un Lote</option>
-            {AllLots && AllLots.map((item: LotInterface) => (
-              <option key={item.idLot} value={item.idLot}>
-                {`${item.businessName} - ${item.establishment} - ${item.lot}`}
-              </option>
-            ))}
+            {AllLots &&
+              AllLots.map((item: LotInterface) => (
+                <option key={item.idLot} value={item.idLot}>
+                  {`${item.businessName} - ${item.establishment} - ${item.lot}`}
+                </option>
+              ))}
           </select>
 
           <input

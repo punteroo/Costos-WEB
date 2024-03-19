@@ -43,12 +43,7 @@ function List({ filtered, allRotations }: ListProps) {
 
   // handlers
   const handleEditRow = (id: number) => {
-    alertPatchPriceGrain(
-      id,
-      "Precio x Grano",
-      allRotations,
-
-    );
+    alertPatchPriceGrain(id, "Precio x Grano", allRotations);
   };
   const handleDeleteRow = async (idLabor: number) => {
     try {

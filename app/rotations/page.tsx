@@ -3,7 +3,6 @@ import SectionTitle from "../components/section-title";
 import RotationBody from "./RotationBody";
 import { RotationTitleIcon } from "../assets/icons/TitleIcon";
 
-
 export default function Rotations() {
   return (
     <Layout>
@@ -12,4 +11,3 @@ export default function Rotations() {
     </Layout>
   );
 }
-

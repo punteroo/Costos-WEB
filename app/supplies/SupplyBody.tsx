@@ -11,7 +11,6 @@ import {
 
 import moment from "moment";
 
-
 export default function SupplyBody() {
   // hooks states
   const [category, setCategory] = useState("");
@@ -66,13 +65,10 @@ export default function SupplyBody() {
     }
   };
 
-
-
   const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
-
 
     const Object: SupplyInterface = {
       category,

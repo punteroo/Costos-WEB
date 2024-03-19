@@ -4,22 +4,23 @@ import {
   RotationInterface,
   PriceGrainInterface,
   ProductionInterface,
-  LotInterface
+  LotInterface,
 } from "../components/interfaces/interface";
 
 interface SearchInputProps {
   allRotations: RotationInterface[];
   allProductions: ProductionInterface[];
   allLots: LotInterface[];
-
 }
 
 export const SearchInput: React.FC<SearchInputProps> = ({
   allRotations,
   allProductions,
-  allLots
+  allLots,
 }) => {
-  const [filteredPriceGrain, setFilteredPriceGrain] = useState<ProductionInterface[]>([]);
+  const [filteredPriceGrain, setFilteredPriceGrain] = useState<
+    ProductionInterface[]
+  >([]);
   const [searchTerm, setSearchTerm] = useState(""); // buscador
 
   // Obtener los datos iniciales al montar el componente
@@ -39,7 +40,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
     // Filtrar lotes según el término de búsqueda
     if (allProductions && allProductions.length > 0) {
       const filtered = allProductions.filter((value: PriceGrainInterface) =>
-      value.campaign?.toLowerCase().includes(searchTerm.toLowerCase())
+        value.campaign?.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredPriceGrain(filtered);
     }
@@ -61,7 +62,6 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         filtered={filteredPriceGrain}
         allRotations={allRotations}
         allLots={allLots}
-
       />
     </div>
   );

@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { RotationInterface, LaborInterface, LotInterface, UnitSupplyInterface } from "../components/interfaces/interface";
-import {  alertDeleteLabor, alertDeleteRotation, alertPatchLabor, alertPatchRotation } from "../components/alerts/sweet";
-
+import {
+  RotationInterface,
+  LaborInterface,
+  LotInterface,
+  UnitSupplyInterface,
+} from "../components/interfaces/interface";
+import {
+  alertDeleteLabor,
+  alertPatchLabor,
+} from "../components/alerts/sweet";
 
 // quede aca en el alert
 interface ListProps {
@@ -11,59 +18,44 @@ interface ListProps {
   allUnits: UnitSupplyInterface[];
 }
 
-
 function List({ filtered, allLots, allRotations, allUnits }: ListProps) {
-  
-  
- // paginado
-const itemsPerPage = 4;
-const [currentPage, setCurrentPage] = useState(1);
-const [currentItems, setCurrentItems] = useState<LaborInterface[]>([]);
-const [maximum, setMaximum] = useState(1);
-const [pageNumbers, setPageNumbers] = useState<number[]>([]);
+  // paginado
+  const itemsPerPage = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentItems, setCurrentItems] = useState<LaborInterface[]>([]);
+  const [maximum, setMaximum] = useState(1);
+  const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
-useEffect(() => {
-  if (filtered) {
-    // Calcula el índice de inicio y fin de la página actual
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
-    setCurrentItems(currentItems);
+  useEffect(() => {
+    if (filtered) {
+      // Calcula el índice de inicio y fin de la página actual
+      const indexOfLastItem = currentPage * itemsPerPage;
+      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+      const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
+      setCurrentItems(currentItems);
 
-  
-    const newPageNumbers = [];
-    for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
-      newPageNumbers.push(i);
+      const newPageNumbers = [];
+      for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
+        newPageNumbers.push(i);
+      }
+      setPageNumbers(newPageNumbers);
+
+      const maximum = Math.max(...newPageNumbers, 1);
+      setMaximum(maximum);
     }
-    setPageNumbers(newPageNumbers);
-  
-    const maximum = Math.max(...newPageNumbers, 1);
-    setMaximum(maximum);
-  }
-}, [currentPage, filtered, itemsPerPage]);
-
+  }, [currentPage, filtered, itemsPerPage]);
 
   // handlers
   const handleEditRow = (idLabor: number) => {
-    alertPatchLabor(
-      idLabor,
-      "Rotacion",
-      allLots,
-      allRotations,
-      allUnits
-    );
+    alertPatchLabor(idLabor, "Rotacion", allLots, allRotations, allUnits);
   };
   const handleDeleteRow = async (idLabor: number) => {
     try {
-      await alertDeleteLabor(
-        idLabor,
-        "Rotacion"
-      );
+      await alertDeleteLabor(idLabor, "Rotacion");
     } catch (error) {
       console.error(error);
     }
   };
-
 
   return (
     <>
@@ -71,7 +63,7 @@ useEffect(() => {
         <table className="w-full border-collapse bg-white text-left text-xs lg:text-sm text-gray-500">
           <thead className="bg-gray-50">
             <tr>
-            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
                 Lote
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
@@ -95,8 +87,14 @@ useEffect(() => {
             {currentItems && currentItems.length > 0 ? (
               currentItems.map((labor: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">{labor.idLot.businessName} - {labor.idLot.establishment} - {labor.idLot.lot}</td>
-                  <td className="px-6 py-4">{labor.idRotation.campaign} - {labor.idRotation.epoch} - {labor.idRotation.crop}</td>
+                  <td className="px-6 py-4">
+                    {labor.idLot.businessName} - {labor.idLot.establishment} -{" "}
+                    {labor.idLot.lot}
+                  </td>
+                  <td className="px-6 py-4">
+                    {labor.idRotation.campaign} - {labor.idRotation.epoch} -{" "}
+                    {labor.idRotation.crop}
+                  </td>
                   <td className="px-6 py-4">{labor.date}</td>
                   <td className="px-6 py-4">{labor.commercialBrand}</td>
                   <td className="px-6 py-4">{labor.dose}</td>
@@ -114,7 +112,7 @@ useEffect(() => {
                           x-tooltip="tooltip"
                           onClick={() =>
                             labor.idLabor !== undefined &&
-                            handleEditRow(labor.idLabor )
+                            handleEditRow(labor.idLabor)
                           }
                         >
                           <path
@@ -159,8 +157,8 @@ useEffect(() => {
           </tbody>
         </table>
       </div>
-            {/* Botones de paginación */}
-            <div className="flex justify-center mt-4">
+      {/* Botones de paginación */}
+      <div className="flex justify-center mt-4">
         <div
           className="
            inline-flex
@@ -234,8 +232,6 @@ useEffect(() => {
       </div>
     </>
   );
-  
-  
 }
 
 export default List;

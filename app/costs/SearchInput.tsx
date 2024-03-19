@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react";
 import List from "./List";
-import { CostInterface, MoneyInterface, SupplyInterface } from "../components/interfaces/interface";
+import {
+  CostInterface,
+  MoneyInterface,
+  SupplyInterface,
+} from "../components/interfaces/interface";
 
 interface SearchInputProps {
   allSupplies: SupplyInterface[];
-  allMoney: MoneyInterface[]; 
-  allCosts: CostInterface[]; 
+  allMoney: MoneyInterface[];
+  allCosts: CostInterface[];
 }
 
-export const SearchInput: React.FC<SearchInputProps> = ({ allSupplies, allMoney, allCosts }) => {
-  (allCosts)
+export const SearchInput: React.FC<SearchInputProps> = ({
+  allSupplies,
+  allMoney,
+  allCosts,
+}) => {
+  allCosts;
   const [filteredCosts, setFilteredCosts] = useState<CostInterface[]>([]);
   const [searchTerm, setSearchTerm] = useState(""); // buscador
 
@@ -48,7 +56,11 @@ export const SearchInput: React.FC<SearchInputProps> = ({ allSupplies, allMoney,
       />
 
       {/* Tabla de lotes filtrados */}
-      <List filtered={filteredCosts} allSupplies={allSupplies} allMoney={allMoney} />
+      <List
+        filtered={filteredCosts}
+        allSupplies={allSupplies}
+        allMoney={allMoney}
+      />
     </div>
   );
 };

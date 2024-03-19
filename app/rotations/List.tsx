@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { RotationInterface } from "../components/interfaces/interface";
-import {  alertDeleteRotation, alertPatchRotation } from "../components/alerts/sweet";
+import {
+  alertDeleteRotation,
+  alertPatchRotation,
+} from "../components/alerts/sweet";
 import { LotInterface } from "../components/interfaces/interface";
 
 // quede aca en el alert}
@@ -9,56 +12,44 @@ interface ListProps {
   lots: LotInterface[];
 }
 
-
 function List({ filtered, lots }: ListProps) {
-  
-  
- // paginado
-const itemsPerPage = 4;
-const [currentPage, setCurrentPage] = useState(1);
-const [currentItems, setCurrentItems] = useState<RotationInterface[]>([]);
-const [maximum, setMaximum] = useState(1);
-const [pageNumbers, setPageNumbers] = useState<number[]>([]);
+  // paginado
+  const itemsPerPage = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentItems, setCurrentItems] = useState<RotationInterface[]>([]);
+  const [maximum, setMaximum] = useState(1);
+  const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
-useEffect(() => {
-  if (filtered) {
-    // Calcula el índice de inicio y fin de la página actual
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
-    setCurrentItems(currentItems);
-  
-    const newPageNumbers = [];
-    for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
-      newPageNumbers.push(i);
+  useEffect(() => {
+    if (filtered) {
+      // Calcula el índice de inicio y fin de la página actual
+      const indexOfLastItem = currentPage * itemsPerPage;
+      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+      const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
+      setCurrentItems(currentItems);
+
+      const newPageNumbers = [];
+      for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
+        newPageNumbers.push(i);
+      }
+      setPageNumbers(newPageNumbers);
+
+      const maximum = Math.max(...newPageNumbers, 1);
+      setMaximum(maximum);
     }
-    setPageNumbers(newPageNumbers);
-  
-    const maximum = Math.max(...newPageNumbers, 1);
-    setMaximum(maximum);
-  }
-}, [currentPage, filtered, itemsPerPage]);
-
+  }, [currentPage, filtered, itemsPerPage]);
 
   // handlers
   const handleEditRotation = (idRotation: number) => {
-    alertPatchRotation(
-      idRotation,
-      "Rotacion",
-      lots
-    );
+    alertPatchRotation(idRotation, "Rotacion", lots);
   };
   const handleDeleteRow = async (idRotation: number) => {
     try {
-      await alertDeleteRotation(
-        idRotation,
-        "Rotacion"
-      );
+      await alertDeleteRotation(idRotation, "Rotacion");
     } catch (error) {
       console.error(error);
     }
   };
-
 
   return (
     <>
@@ -66,7 +57,7 @@ useEffect(() => {
         <table className="w-full border-collapse bg-white text-left text-xs lg:text-sm text-gray-500">
           <thead className="bg-gray-50">
             <tr>
-            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
                 Lote
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
@@ -88,7 +79,10 @@ useEffect(() => {
               currentItems.map((rotation: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="flex gap-3 px-6 py-4 font-normal text-gray-900">
-                    <div className="text-sm">{rotation.idLot.businessName} - {rotation.idLot.establishment} - {rotation.idLot.lot}</div>
+                    <div className="text-sm">
+                      {rotation.idLot.businessName} -{" "}
+                      {rotation.idLot.establishment} - {rotation.idLot.lot}
+                    </div>
                   </td>
                   <td className="px-6 py-4">{rotation.campaign}</td>
                   <td className="px-6 py-4">{rotation.epoch}</td>
@@ -152,8 +146,8 @@ useEffect(() => {
           </tbody>
         </table>
       </div>
-            {/* Botones de paginación */}
-            <div className="flex justify-center mt-4">
+      {/* Botones de paginación */}
+      <div className="flex justify-center mt-4">
         <div
           className="
            inline-flex
@@ -227,8 +221,6 @@ useEffect(() => {
       </div>
     </>
   );
-  
-  
 }
 
 export default List;

@@ -3,7 +3,6 @@
 import {
   getAllLots,
   getAllRotations,
-  postRotation,
   getAllSupplies,
   getAllUnits,
   getAllLabors,
@@ -13,8 +12,7 @@ import { alertAddOk } from "../components/alerts/sweet";
 import { useEffect, useState } from "react";
 import { SearchInput } from "./SearchInput";
 import ReactDatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css"; 
-
+import "react-datepicker/dist/react-datepicker.css";
 
 import {
   LaborInterface,
@@ -35,15 +33,14 @@ export default function LaborBody() {
   const [AllLabors, setAllLabors] = useState([]);
   const [lot, setLot] = useState(0);
   const [rotation, setRotation] = useState(0);
-  // const [date, setDate] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [dateFormated, setDateFormated] = useState(moment(selectedDate).format("DD/MM/YYYY"))
+  const [dateFormated, setDateFormated] = useState(
+    moment(selectedDate).format("DD/MM/YYYY")
+  );
 
   const [commercialBrand, setCommercialBrand] = useState("");
   const [dose, setDose] = useState(0);
   const [unit, setUnit] = useState(0);
-  // const [unit, setUnit] = useState(0);
-
 
   // useEffect para traer info de las apis
   useEffect(() => {
@@ -123,7 +120,6 @@ export default function LaborBody() {
   };
 
   const handleSetDose = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(Number(e.target.value))
     setDose(Number(e.target.value));
   };
 
@@ -143,13 +139,12 @@ export default function LaborBody() {
     e.preventDefault();
 
     const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
-    const finalDose = Number(dose.toFixed(2))
-
+    const finalDose = Number(dose.toFixed(2));
 
     const Object: LaborInterface = {
       idLot: lot,
       idRotation: rotation,
-      date:dateFormated,
+      date: dateFormated,
       commercialBrand,
       dose: finalDose,
       idUnit: unit,
@@ -158,7 +153,6 @@ export default function LaborBody() {
     };
 
     try {
-      (Object)
       const result = await postLabor(Object);
 
       // Verifica si result es undefined antes de acceder a sus propiedades
@@ -186,11 +180,12 @@ export default function LaborBody() {
             defaultValue={"Seleccione un Lote"}
           >
             <option disabled>Seleccione un Lote</option>
-            {AllLots && AllLots.map((item: LotInterface) => (
-              <option key={item.idLot} value={item.idLot}>
-                {`${item.businessName} - ${item.establishment} - ${item.lot}`}
-              </option>
-            ))}
+            {AllLots &&
+              AllLots.map((item: LotInterface) => (
+                <option key={item.idLot} value={item.idLot}>
+                  {`${item.businessName} - ${item.establishment} - ${item.lot}`}
+                </option>
+              ))}
           </select>
 
           {/* Rotacion */}
@@ -208,7 +203,6 @@ export default function LaborBody() {
               ))}
           </select>
 
- 
           {/* Fecha */}
           <div style={{ position: "relative", display: "inline-block" }}>
             <ReactDatePicker
@@ -230,11 +224,12 @@ export default function LaborBody() {
             defaultValue={"Seleccione una Marca Comercial"}
           >
             <option disabled>Seleccione una Marca Comercial</option>
-            {AllSupplies && AllSupplies.map((item: SupplyInterface) => (
-              <option key={item.idSupply} value={item.idSupply}>
-                {`${item.commercialBrand}`}
-              </option>
-            ))}
+            {AllSupplies &&
+              AllSupplies.map((item: SupplyInterface) => (
+                <option key={item.idSupply} value={item.idSupply}>
+                  {`${item.commercialBrand}`}
+                </option>
+              ))}
           </select>
 
           {/* Dosis */}
@@ -254,11 +249,12 @@ export default function LaborBody() {
             defaultValue={"Seleccione una Unidad"}
           >
             <option disabled>Seleccione una Unidad</option>
-            {AllUnits && AllUnits.map((item: UnitSupplyInterface) => (
-              <option key={item.idUnit} value={item.idUnit}>
-                {`${item.description}`}
-              </option>
-            ))}
+            {AllUnits &&
+              AllUnits.map((item: UnitSupplyInterface) => (
+                <option key={item.idUnit} value={item.idUnit}>
+                  {`${item.description}`}
+                </option>
+              ))}
           </select>
 
           <button

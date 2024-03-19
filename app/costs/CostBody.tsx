@@ -1,6 +1,11 @@
 "use client";
 
-import { getAllSupplies, getAllMoney, getAllCosts, postCost } from "../api/apis";
+import {
+  getAllSupplies,
+  getAllMoney,
+  getAllCosts,
+  postCost,
+} from "../api/apis";
 import { alertAddOk } from "../components/alerts/sweet";
 import { useEffect, useState } from "react";
 import { SearchInput } from "./SearchInput";
@@ -25,10 +30,10 @@ export default function CostBody() {
     moment(selectedDate).format("DD/MM/YYYY")
   );
 
-  const [supply, setSupply] = useState(0)
-  const [money, setMoney] = useState(0)
-  const [price, setPrice] = useState(0)
-  const [quantity, setQuantity] = useState(0)
+  const [supply, setSupply] = useState(0);
+  const [money, setMoney] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [quantity, setQuantity] = useState(0);
 
   // useEffect para traer info de las apis
   useEffect(() => {
@@ -56,13 +61,11 @@ export default function CostBody() {
   // handlers
 
   const handleSetDate = (selectedDate: Date | null) => {
-    
     const formatDate = moment(selectedDate).format("DD/MM/YYYY"); // Obtener la fecha actual formateada
     setDateFormated(formatDate);
   };
 
   const handleSetSupply = (value: string) => {
-    (value)
     const found: SupplyInterface | undefined = AllSupplies.find(
       (supply: SupplyInterface) => supply.idSupply === Number(value)
     );
@@ -75,7 +78,6 @@ export default function CostBody() {
   };
 
   const handleSetMoney = (value: string) => {
-    (value)
     const found: MoneyInterface | undefined = AllMoney.find(
       (money: MoneyInterface) => money.idMoney === Number(value)
     );
@@ -88,29 +90,25 @@ export default function CostBody() {
   };
 
   const handleSetPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-    (e.target.value)
-    setPrice(Number(e.target.value))
-  }
+    setPrice(Number(e.target.value));
+  };
   const handleSetquantity = (e: React.ChangeEvent<HTMLInputElement>) => {
-    (e.target.value)
-    setQuantity(Number(e.target.value))
-  }
+    setQuantity(Number(e.target.value));
+  };
 
   const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    
     e.preventDefault();
 
     const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
-    const finalPrice = Number(price.toFixed(2))
-    const finalQuantity = Number(quantity.toFixed(2))
-
+    const finalPrice = Number(price.toFixed(2));
+    const finalQuantity = Number(quantity.toFixed(2));
 
     const Object: CostInterface = {
       date: dateFormated,
       idSupply: supply,
       idMoney: money,
-      price:finalPrice,
-      quantity:finalQuantity,
+      price: finalPrice,
+      quantity: finalQuantity,
       createdAt: currentDate,
       updatedAt: currentDate,
     };
@@ -121,10 +119,10 @@ export default function CostBody() {
       // Verifica si result es undefined antes de acceder a sus propiedades
       if (result && result.status === 201) {
         alertAddOk("Costo cargado con éxito");
-        setDateFormated(dateFormated)
-        setSupply(0)
-        setMoney(0)
-        setQuantity(0)
+        setDateFormated(dateFormated);
+        setSupply(0);
+        setMoney(0);
+        setQuantity(0);
       }
     } catch (error) {
       throw new Error(`Error al cargar el Costo: ${error}`);
@@ -135,9 +133,8 @@ export default function CostBody() {
     <>
       <div className="space-y-4 px-6">
         <div className="card grid grid-cols-3 gap-4 mt-4">
-
-              {/* Fecha */}
-              <div style={{ position: "relative", display: "inline-block" }}>
+          {/* Fecha */}
+          <div style={{ position: "relative", display: "inline-block" }}>
             <ReactDatePicker
               selected={selectedDate}
               className="input"
@@ -148,11 +145,11 @@ export default function CostBody() {
             />
           </div>
 
-
-
           {/* Insumo */}
           <select
-            onInput={(e) => handleSetSupply((e.target as HTMLSelectElement).value)}
+            onInput={(e) =>
+              handleSetSupply((e.target as HTMLSelectElement).value)
+            }
             className="input"
             defaultValue={"Seleccione un Insumo"}
           >
@@ -187,16 +184,13 @@ export default function CostBody() {
             onChange={handleSetPrice}
           />
 
-                    {/* Cantidad */}
-                    <input
+          {/* Cantidad */}
+          <input
             type="number"
             className="input"
             placeholder="Cantidad"
             onChange={handleSetquantity}
           />
-
-
-
 
           <button
             className="primary_btn btn_black max-w-max"

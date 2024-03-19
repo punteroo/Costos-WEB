@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from "react";
 
 interface SectionTitleProps {
   title: string;
@@ -11,7 +11,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({ title, icon }) => {
       <div className="flex gap-3 items-center mx-12">
         {icon}
 
-        <h1 className='title'>{title}</h1>
+        <h1 className="title">{title}</h1>
       </div>
     </div>
   );

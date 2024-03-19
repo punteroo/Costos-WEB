@@ -1,7 +1,5 @@
 "use client";
 
-//marca comercial de supply - campaña - unidad
-
 import {
   getAllSupplies,
   getAllRotations,
@@ -122,7 +120,7 @@ export default function ListPriceBody() {
     );
     if (found) {
       const { idMoney } = found;
-      (idMoney)
+      idMoney;
       setMoney(Number(idMoney));
     } else {
       throw new Error("Moneda no encontrada");
