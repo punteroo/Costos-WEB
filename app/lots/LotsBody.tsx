@@ -51,22 +51,21 @@ export default function LotsBody() {
     e.preventDefault();
 
     const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
-    const finalSurface= Number(surface.toFixed(2))
-    const finalLatitude= Number(latitude.toFixed(2))
-    const finalLength= Number(length.toFixed(2))
+    const finalSurface = Number(surface.toFixed(2));
+    const finalLatitude = Number(latitude.toFixed(2));
+    const finalLength = Number(length.toFixed(2));
 
     const lotObject: LotInterface = {
       businessName,
       establishment,
       lot,
-      surface:finalSurface,
-      latitude:finalLatitude,
-      length:finalLength,
+      surface: finalSurface,
+      latitude: finalLatitude,
+      length: finalLength,
       condition,
       createdAt: currentDate,
       updatedAt: currentDate,
     };
-
 
     try {
       const result = await postLot(lotObject);
@@ -74,11 +73,15 @@ export default function LotsBody() {
       // Verifica si result es undefined antes de acceder a sus propiedades
       if (result && result.status === 201) {
         alertAddOk("Lote cargado con éxito");
-      } else if(result?.data.message === "Recurso no encontrado debido a una violación de clave foránea"){
-        alertRemoveError('No se puede eliminar el registro, hay datos asociados')
-      }else {
+      } else if (
+        result?.data.message ===
+        "Recurso no encontrado debido a una violación de clave foránea"
+      ) {
+        alertRemoveError(
+          "No se puede eliminar el registro, hay datos asociados"
+        );
+      } else {
         throw new Error("Error al cargar el Lote o resultado no válido");
-        
       }
     } catch (error) {
       throw new Error(`Error al cargar el Lote: ${error}`);

@@ -1,6 +1,6 @@
 const Dashboard = () => {
   return (
-    <div style={{ width: '100%', height: '100vh' }}>
+    <div style={{ width: "100%", height: "100vh" }}>
       <iframe
         title="LABORATORIO"
         width="100%"
@@ -13,4 +13,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

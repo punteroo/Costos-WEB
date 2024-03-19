@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import List from "./List";
 import {
-  LaborInterface,
   ListPriceInterface,
   MoneyInterface,
   RotationInterface,
@@ -22,9 +21,11 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   allUnits,
   allRotations,
   allListPrice,
-  allMoney
+  allMoney,
 }) => {
-  const [filteredListPrice, setFilteredListPrice] = useState<ListPriceInterface[]>([]);
+  const [filteredListPrice, setFilteredListPrice] = useState<
+    ListPriceInterface[]
+  >([]);
   const [searchTerm, setSearchTerm] = useState(""); // buscador
 
   // Obtener los datos iniciales al montar el componente
@@ -44,7 +45,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
     // Filtrar lotes según el término de búsqueda
     if (allListPrice && allListPrice.length > 0) {
       const filtered = allListPrice.filter((value: ListPriceInterface) =>
-      value.commercialBrand?.toLowerCase().includes(searchTerm.toLowerCase())
+        value.commercialBrand?.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredListPrice(filtered);
     }

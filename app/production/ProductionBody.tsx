@@ -50,11 +50,11 @@ export default function ProductionBody() {
         setAllProductions(resultAllProductions);
 
         if (resultAllRotations.length > 0) {
-          const uniqueCampaigns:any = Array.from(new Set(resultAllRotations.map((value:any) => value.campaign)));
+          const uniqueCampaigns: any = Array.from(
+            new Set(resultAllRotations.map((value: any) => value.campaign))
+          );
           setAllCampaign(uniqueCampaigns);
         }
-        
-        
       } catch (error) {
         throw new Error(`Error al obtener el Precio por : ${error}`);
       }
@@ -103,14 +103,14 @@ export default function ProductionBody() {
     e.preventDefault();
 
     const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
-    const finalProductionTn = Number(productionTn.toFixed(2))
-    const finalProductionOptimum = Number(productionOptimum.toFixed(2))
+    const finalProductionTn = Number(productionTn.toFixed(2));
+    const finalProductionOptimum = Number(productionOptimum.toFixed(2));
 
     const Object: ProductionInterface = {
       idLot,
       campaign,
-      productionTn:finalProductionTn,
-      productionOptimum:finalProductionOptimum,
+      productionTn: finalProductionTn,
+      productionOptimum: finalProductionOptimum,
       createdAt: currentDate,
       updatedAt: currentDate,
     };

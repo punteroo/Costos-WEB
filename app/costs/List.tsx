@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { CostInterface, SupplyInterface, MoneyInterface } from "../components/interfaces/interface";
-import {  alertDeleteCost, alertDeleteLabor,  alertPatchCost,  alertPatchLabor,  } from "../components/alerts/sweet";
-
+import {
+  CostInterface,
+  SupplyInterface,
+  MoneyInterface,
+} from "../components/interfaces/interface";
+import {
+  alertDeleteCost,
+  alertDeleteLabor,
+  alertPatchCost,
+  alertPatchLabor,
+} from "../components/alerts/sweet";
 
 // quede aca en el alert
 interface ListProps {
@@ -10,67 +18,53 @@ interface ListProps {
   allMoney: MoneyInterface[];
 }
 
-
 function List({ filtered, allSupplies, allMoney }: ListProps) {
-  
-  
- // paginado
-const itemsPerPage = 4;
-const [currentPage, setCurrentPage] = useState(1);
-const [currentItems, setCurrentItems] = useState<CostInterface[]>([]);
-const [maximum, setMaximum] = useState(1);
-const [pageNumbers, setPageNumbers] = useState<number[]>([]);
+  // paginado
+  const itemsPerPage = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentItems, setCurrentItems] = useState<CostInterface[]>([]);
+  const [maximum, setMaximum] = useState(1);
+  const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
-useEffect(() => {
-  if (filtered) {
-    // Calcula el índice de inicio y fin de la página actual
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
-    setCurrentItems(currentItems);
+  useEffect(() => {
+    if (filtered) {
+      // Calcula el índice de inicio y fin de la página actual
+      const indexOfLastItem = currentPage * itemsPerPage;
+      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+      const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
+      setCurrentItems(currentItems);
 
-  
-    const newPageNumbers = [];
-    for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
-      newPageNumbers.push(i);
+      const newPageNumbers = [];
+      for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
+        newPageNumbers.push(i);
+      }
+      setPageNumbers(newPageNumbers);
+
+      const maximum = Math.max(...newPageNumbers, 1);
+      setMaximum(maximum);
     }
-    setPageNumbers(newPageNumbers);
-  
-    const maximum = Math.max(...newPageNumbers, 1);
-    setMaximum(maximum);
-  }
-}, [currentPage, filtered, itemsPerPage]);
-
+  }, [currentPage, filtered, itemsPerPage]);
 
   // handlers
   const handleEditRow = (idCost: number) => {
-    alertPatchCost(
-      idCost,
-      "Costo",
-      allSupplies,
-      allMoney,
-      
-    );
+    alertPatchCost(idCost, "Costo", allSupplies, allMoney);
   };
   const handleDeleteRow = async (idCost: number) => {
     try {
-      await alertDeleteCost(
-        idCost,
-        "Costo"
-      );
+      await alertDeleteCost(idCost, "Costo");
     } catch (error) {
       console.error(error);
     }
   };
 
-  (currentItems)
+  currentItems;
   return (
     <>
       <div className="overflow-auto rounded-lg border border-gray-200 shadow-md my-5 md:h-80">
         <table className="w-full border-collapse bg-white text-left text-xs lg:text-sm text-gray-500">
           <thead className="bg-gray-50">
             <tr>
-            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
                 Fecha
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
@@ -92,7 +86,10 @@ useEffect(() => {
               currentItems.map((item: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="px-6 py-4">{item.date}</td>
-                  <td className="px-6 py-4">{item.idSupply.category} - {item.idSupply.subCategory} - {item.idSupply.family}</td>
+                  <td className="px-6 py-4">
+                    {item.idSupply.category} - {item.idSupply.subCategory} -{" "}
+                    {item.idSupply.family}
+                  </td>
                   <td className="px-6 py-4">{item.idMoney.description}</td>
                   <td className="px-6 py-4">{item.price}</td>
                   <td className="px-6 py-4">{item.quantity}</td>
@@ -109,7 +106,7 @@ useEffect(() => {
                           x-tooltip="tooltip"
                           onClick={() =>
                             item.idCost !== undefined &&
-                            handleEditRow(item.idCost )
+                            handleEditRow(item.idCost)
                           }
                         >
                           <path
@@ -154,8 +151,8 @@ useEffect(() => {
           </tbody>
         </table>
       </div>
-            {/* Botones de paginación */}
-            <div className="flex justify-center mt-4">
+      {/* Botones de paginación */}
+      <div className="flex justify-center mt-4">
         <div
           className="
            inline-flex
@@ -229,8 +226,6 @@ useEffect(() => {
       </div>
     </>
   );
-  
-  
 }
 
 export default List;

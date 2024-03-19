@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   RotationInterface,
   LotInterface,
-  ProductionInterface
+  ProductionInterface,
 } from "../components/interfaces/interface";
 import {
   alertPatchProduction,
@@ -45,13 +45,7 @@ function List({ filtered, allRotations, allLots }: ListProps) {
 
   // handlers
   const handleEditRow = (id: number) => {
-    alertPatchProduction(
-      id,
-      "Produccion",
-      allRotations,
-      allLots
-
-    );
+    alertPatchProduction(id, "Produccion", allRotations, allLots);
   };
   const handleDeleteRow = async (idLabor: number) => {
     try {
@@ -85,7 +79,10 @@ function List({ filtered, allRotations, allLots }: ListProps) {
             {currentItems && currentItems.length > 0 ? (
               currentItems.map((item: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">{item.idLot.businessName} - {item.idLot.establishment} - {item.idLot.lot}</td>
+                  <td className="px-6 py-4">
+                    {item.idLot.businessName} - {item.idLot.establishment} -{" "}
+                    {item.idLot.lot}
+                  </td>
                   <td className="px-6 py-4">{item.campaign}</td>
                   <td className="px-6 py-4">{`${item.productionTn}`}</td>
                   <td className="px-6 py-4">{`${item.productionOptimum}`}</td>

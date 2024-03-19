@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react";
 import List from "./List";
-import { LaborInterface, LotInterface, RotationInterface, UnitSupplyInterface } from "../components/interfaces/interface";
+import {
+  LaborInterface,
+  LotInterface,
+  RotationInterface,
+  UnitSupplyInterface,
+} from "../components/interfaces/interface";
 
 interface SearchInputProps {
   allRotations: RotationInterface[];
-  allLots: LotInterface[]; 
-  allLabors: LaborInterface[]; 
-  allUnits: UnitSupplyInterface[]; 
+  allLots: LotInterface[];
+  allLabors: LaborInterface[];
+  allUnits: UnitSupplyInterface[];
 }
 
-export const SearchInput: React.FC<SearchInputProps> = ({ allRotations, allLots, allLabors, allUnits }) => {
-
+export const SearchInput: React.FC<SearchInputProps> = ({
+  allRotations,
+  allLots,
+  allLabors,
+  allUnits,
+}) => {
   const [filteredLabors, setFilteredLabors] = useState<LaborInterface[]>([]);
   const [searchTerm, setSearchTerm] = useState(""); // buscador
 
@@ -49,7 +58,12 @@ export const SearchInput: React.FC<SearchInputProps> = ({ allRotations, allLots,
       />
 
       {/* Tabla de lotes filtrados */}
-      <List filtered={filteredLabors} allLots={allLots} allRotations={allRotations} allUnits={allUnits} />
+      <List
+        filtered={filteredLabors}
+        allLots={allLots}
+        allRotations={allRotations}
+        allUnits={allUnits}
+      />
     </div>
   );
 };

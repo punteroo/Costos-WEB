@@ -19,7 +19,7 @@ export default function SearchInput() {
         ]);
         if (responseAllSupplies && responseAllSupplies.data) {
           const resultAllSupplies = responseAllSupplies?.data;
-          
+
           setAllSupplies(resultAllSupplies);
           setFilteredSupplies(resultAllSupplies);
           const resultAllUnits = responseAllUnits?.data;
@@ -60,4 +60,3 @@ export default function SearchInput() {
     </div>
   );
 }
-

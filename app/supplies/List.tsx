@@ -1,64 +1,54 @@
 import React, { useState, useEffect } from "react";
 import { SupplyInterface } from "../components/interfaces/interface";
-import {  alertDeleteSupply, alertPatchSupply } from "../components/alerts/sweet";
+import {
+  alertDeleteSupply,
+  alertPatchSupply,
+} from "../components/alerts/sweet";
 import { UnitSupplyInterface } from "../components/interfaces/interface";
-
 
 interface ListProps {
   filtered: SupplyInterface[];
   units: UnitSupplyInterface[];
 }
 
-
 function List({ filtered, units }: ListProps) {
-  
-  
- // paginado
-const itemsPerPage = 4;
-const [currentPage, setCurrentPage] = useState(1);
-const [currentItems, setCurrentItems] = useState<SupplyInterface[]>([]);
-const [maximum, setMaximum] = useState(1);
-const [pageNumbers, setPageNumbers] = useState<number[]>([]);
+  // paginado
+  const itemsPerPage = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentItems, setCurrentItems] = useState<SupplyInterface[]>([]);
+  const [maximum, setMaximum] = useState(1);
+  const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
-useEffect(() => {
-  if (filtered) {
-    // Calcula el índice de inicio y fin de la página actual
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
-    setCurrentItems(currentItems);
-  
-    const newPageNumbers = [];
-    for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
-      newPageNumbers.push(i);
+  useEffect(() => {
+    if (filtered) {
+      // Calcula el índice de inicio y fin de la página actual
+      const indexOfLastItem = currentPage * itemsPerPage;
+      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+      const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
+      setCurrentItems(currentItems);
+
+      const newPageNumbers = [];
+      for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
+        newPageNumbers.push(i);
+      }
+      setPageNumbers(newPageNumbers);
+
+      const maximum = Math.max(...newPageNumbers, 1);
+      setMaximum(maximum);
     }
-    setPageNumbers(newPageNumbers);
-  
-    const maximum = Math.max(...newPageNumbers, 1);
-    setMaximum(maximum);
-  }
-}, [currentPage, filtered, itemsPerPage]);
-
+  }, [currentPage, filtered, itemsPerPage]);
 
   // handlers
   const handleEditSupply = (idSupply: number) => {
-    alertPatchSupply(
-      idSupply,
-      "Insumo",
-      units
-    );
+    alertPatchSupply(idSupply, "Insumo", units);
   };
   const handleDeleteRow = async (idSupply: number) => {
     try {
-      await alertDeleteSupply(
-        idSupply,
-        "Insumo"
-      );
+      await alertDeleteSupply(idSupply, "Insumo");
     } catch (error) {
       console.error(error);
     }
   };
-
 
   return (
     <>
@@ -152,8 +142,8 @@ useEffect(() => {
           </tbody>
         </table>
       </div>
-            {/* Botones de paginación */}
-            <div className="flex justify-center mt-4">
+      {/* Botones de paginación */}
+      <div className="flex justify-center mt-4">
         <div
           className="
            inline-flex
@@ -227,8 +217,6 @@ useEffect(() => {
       </div>
     </>
   );
-  
-  
 }
 
 export default List;

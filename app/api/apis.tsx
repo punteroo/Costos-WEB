@@ -160,7 +160,6 @@ export const getAllUnits = async () => {
   }
 };
 
-
 // MONEDA
 
 export const getAllMoney = async () => {
@@ -378,7 +377,6 @@ export const deleteListPrice = async (id: number) => {
   }
 };
 
-
 // COSTO
 export const postCost = async (object: CostInterface) => {
   try {
@@ -447,9 +445,6 @@ export const deleteCost = async (id: number) => {
   }
 };
 
-
-
-
 // PRECIO X GRANO
 export const postPriceGrain = async (object: PriceGrainInterface) => {
   try {
@@ -463,7 +458,10 @@ export const postPriceGrain = async (object: PriceGrainInterface) => {
   }
 };
 
-export const editPriceGrain = async (id: number, object: PriceGrainInterface) => {
+export const editPriceGrain = async (
+  id: number,
+  object: PriceGrainInterface
+) => {
   try {
     const result = await axios.patch(
       `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_PRICEGRAIN}${process.env.NEXT_PUBLIC_PRICEGRAIN_EDIT}/${id}`,
@@ -518,8 +516,6 @@ export const deletePriceGrain = async (id: number) => {
   }
 };
 
-
-
 // PRODUCCIÓN
 export const postProduction = async (object: ProductionInterface) => {
   try {
@@ -533,7 +529,10 @@ export const postProduction = async (object: ProductionInterface) => {
   }
 };
 
-export const editProduction = async (id: number, object: ProductionInterface) => {
+export const editProduction = async (
+  id: number,
+  object: ProductionInterface
+) => {
   try {
     const result = await axios.patch(
       `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_PRODUCTION}${process.env.NEXT_PUBLIC_PRODUCTION_EDIT}/${id}`,

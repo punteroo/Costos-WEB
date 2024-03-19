@@ -17,10 +17,10 @@ export default function SearchInput() {
           getAllRotations(),
           getAllLots(),
         ]);
-        
+
         if (responseAllRotation && responseAllRotation.data) {
           const resultAllRotation = responseAllRotation?.data;
-          
+
           setAllRotation(resultAllRotation);
           setFilteredRotation(resultAllRotation);
           const resultAllLots = responseAllLots?.data;
@@ -36,12 +36,11 @@ export default function SearchInput() {
     fetchData();
   }, []);
 
-
   useEffect(() => {
     // Filtrar lotes según el término de búsqueda
     if (allRotation && allRotation.length > 0) {
       const filtered = allRotation.filter((rotation: RotationInterface) =>
-      rotation.campaign?.toLowerCase().includes(searchTerm.toLowerCase())
+        rotation.campaign?.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredRotation(filtered);
     }
@@ -63,4 +62,3 @@ export default function SearchInput() {
     </div>
   );
 }
-
