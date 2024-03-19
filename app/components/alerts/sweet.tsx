@@ -6,6 +6,7 @@ import {
   ListPriceInterface,
   LotInterface,
   MoneyInterface,
+  PriceGrainInterface,
   RotationInterface,
   SupplyInterface,
   UnitSupplyInterface,
@@ -30,6 +31,8 @@ import {
   editCost,
   deleteCost,
   getOneCost,
+  editPriceGrain,
+  deletePriceGrain,
 } from "@/app/api/apis";
 
 const MySwal = withReactContent(Swal);
@@ -924,7 +927,7 @@ export const alertPatchCost = async (
   }
 };
 
-// Eliminar un insumo dentro de la lista de precios
+// Eliminar un costo 
 export const alertDeleteCost = async (id: number, param1: string) => {
   try {
     await Swal.fire({
@@ -939,6 +942,146 @@ export const alertDeleteCost = async (id: number, param1: string) => {
       if (result.isConfirmed) {
         try {
           const resultDelete = await deleteCost(id);
+          if (resultDelete?.status === 200) {
+            Swal.fire({
+              title: "Eliminado",
+              text: `El ${param1} ha sido eliminado`,
+              icon: "success",
+            });
+          }
+        } catch (error) {
+          throw new Error(`Error al intentar eliminar el ${param1}: ${error}`);
+        }
+      }
+    });
+  } catch (error) {
+    throw new Error(`Error en el método de eliminar ${param1}: ${error}`);
+  }
+};
+
+
+
+/* PRECIO X GRANO */
+
+// Editar precio x Grano
+
+export const alertPatchPriceGrain = async (
+  id: number,
+  param1: string,
+  allRotations: RotationInterface[],
+
+) => {
+  try {
+    const response = await getOneListPrice(id);
+    const objectResponse: PriceGrainInterface | undefined = response?.data;
+
+
+    if (objectResponse) {
+      Swal.fire({
+        title: "Editar Objeto",
+        html: `
+
+        <label for="campaign">Campaña</label>   
+        <select id="campaign" class="inputEdit">
+          ${allRotations
+            ?.map(
+              (option) => `
+            <option value="${option.campaign}" 
+            ${objectResponse.campaign === option.campaign ? "selected" : ""}>
+              ${option.campaign} 
+            </option>`
+            )
+            .join("")}
+        </select>
+
+
+        <label for="crop">Cultivo</label>   
+        <select id="crop" class="inputEdit">
+          ${allRotations
+            ?.map(
+              (option) => `
+            <option value="${option.crop}" 
+            ${objectResponse.crop === option.crop ? "selected" : ""}>
+              ${option.crop} 
+            </option>`
+            )
+            .join("")}
+        </select>
+        
+        
+        <label for="price">Precio</label>
+        <input type="number" id="price" class="inputEdit" value="${
+          objectResponse.price
+        }">
+
+
+        `,
+        showCancelButton: true,
+        confirmButtonText: "Guardar Cambios",
+        cancelButtonText: "Cancelar",
+        preConfirm: async () => {
+          // Obtén los valores de los campos de manera segura
+          const input1 =
+            Swal.getPopup()?.querySelector<HTMLInputElement>("#campaign");
+          const input2 =
+            Swal.getPopup()?.querySelector<HTMLInputElement>("#crop");
+          const input3 =
+            Swal.getPopup()?.querySelector<HTMLInputElement>("#price");
+
+
+
+          const inputTransform1 = input1?.value;
+          const inputTransform2 = input2?.value;
+          const inputTransform3 = Number(input3?.value);
+;
+
+          const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+
+          const object: PriceGrainInterface = {
+            campaign: inputTransform1,
+            crop: inputTransform2,
+            price: inputTransform3,
+            updatedAt: currentDate,
+          };
+
+          const finalPatch = Object.fromEntries(
+            Object.entries(object).filter(([key, value]) => value !== "")
+          );
+
+          try {
+            const result = await editPriceGrain(id, finalPatch as PriceGrainInterface);
+
+            alertAddOk(`El ${param1} se modifico con exito`);
+
+            return result?.data;
+          } catch (error) {
+            console.error(
+              `error al intentar realizar el patch en ${param1}: ${error}`
+            );
+          }
+        },
+      });
+    }
+  } catch (error) {
+    throw new Error(`Error en el método de patch ${param1}: ${error}`);
+  }
+};
+
+// Eliminar un costo 
+export const alertDeletePriceGrain = async (id: number, param1: string) => {
+  try {
+    await Swal.fire({
+      title: "¿Confirma la Eliminación?",
+      text: "Este proceso no tiene retorno",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DC143C",
+      cancelButtonColor: "#DCDCDC",
+      confirmButtonText: "Eliminar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const resultDelete = await deletePriceGrain(id);
           if (resultDelete?.status === 200) {
             Swal.fire({
               title: "Eliminado",

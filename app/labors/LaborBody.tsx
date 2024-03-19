@@ -155,7 +155,7 @@ export default function LaborBody() {
     };
 
     try {
-      console.log(Object)
+      (Object)
       const result = await postLabor(Object);
 
       // Verifica si result es undefined antes de acceder a sus propiedades

@@ -78,3 +78,13 @@ export interface MoneyInterface {
     idMoney?: number,
     description?: string,
 }
+
+
+export interface PriceGrainInterface {
+    idPriceGrain?: number,
+    campaign?: string,
+    crop?: string,
+    price?: number
+    createdAt?: string
+    updatedAt?: string
+}

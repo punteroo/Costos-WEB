@@ -4,6 +4,7 @@ import {
   LaborInterface,
   ListPriceInterface,
   LotInterface,
+  PriceGrainInterface,
   RotationInterface,
   SupplyInterface,
 } from "../components/interfaces/interface";
@@ -407,7 +408,7 @@ export const getAllCosts = async () => {
     const result = await axios.get(
       `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_COST}${process.env.NEXT_PUBLIC_COST_GETALL}`
     );
-    console.log('resultado de costos: ', result)
+    ('resultado de costos: ', result)
     return result;
   } catch (error) {
     console.error("Error al obtener el costo:", error);
@@ -442,6 +443,77 @@ export const deleteCost = async (id: number) => {
     } else {
       // Manejar otros tipos de errores
       console.error("Error al eliminar el costo:", error);
+    }
+  }
+};
+
+
+
+
+// PRECIO X GRANDO
+export const postPriceGrain = async (object: PriceGrainInterface) => {
+  try {
+    const result = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_PRICEGRAIN}${process.env.NEXT_PUBLIC_PRICEGRAIN_POST}`,
+      object
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al cargar el Precio por grano:", error);
+  }
+};
+
+export const editPriceGrain = async (id: number, object: PriceGrainInterface) => {
+  try {
+    const result = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_PRICEGRAIN}${process.env.NEXT_PUBLIC_PRICEGRAIN_EDIT}/${id}`,
+      object
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al editar el Precio por grano:", error);
+  }
+};
+
+export const getAllPriceGrains = async () => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_PRICEGRAIN}${process.env.NEXT_PUBLIC_PRICEGRAIN_GETALL}`
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al obtener el Precio por grano:", error);
+  }
+};
+
+export const getOnePriceGrain = async (id: number) => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_PRICEGRAIN}${process.env.NEXT_PUBLIC_PRICEGRAIN_GETONE}/${id}`
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al obtener el Precio por grano:", error);
+  }
+};
+
+export const deletePriceGrain = async (id: number) => {
+  try {
+    const result = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_PRICEGRAIN}${process.env.NEXT_PUBLIC_PRICEGRAIN_DELETE}/${id}`
+    );
+    return result;
+  } catch (error: any) {
+    if (
+      error instanceof AxiosError &&
+      error.response?.data.message ===
+        "Recurso no encontrado debido a una violación de clave foránea"
+    ) {
+      // Manejar errores de Axios
+      alertRemoveError("El recurso no se puede eliminar por datos vinculados");
+    } else {
+      // Manejar otros tipos de errores
+      console.error("Error al eliminar el Precio por grano:", error);
     }
   }
 };
