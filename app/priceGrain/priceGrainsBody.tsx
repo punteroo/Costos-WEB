@@ -103,11 +103,12 @@ export default function PriceGrainBody() {
     e.preventDefault();
 
     const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+    const finalPrice = Number(price.toFixed(2))
 
     const Object: PriceGrainInterface = {
       campaign,
       crop,
-      price,
+      price: finalPrice,
       createdAt: currentDate,
       updatedAt: currentDate,
     };
@@ -127,7 +128,7 @@ export default function PriceGrainBody() {
     }
   };
 
-  (AllCampaigns)
+
   return (
     <>
       <div className="space-y-4 px-6">
@@ -174,6 +175,7 @@ export default function PriceGrainBody() {
             className="input"
             placeholder="Precio"
             onChange={handleSetPrice}
+            step=".01"
           />
 
           <button

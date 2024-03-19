@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from "react";
 import {
   RotationInterface,
-  PriceGrainInterface,
+  LotInterface,
+  ProductionInterface
 } from "../components/interfaces/interface";
 import {
-  alertPatchPriceGrain,
-  alertDeletePriceGrain,
-  alertDeleteListPrice,
+  alertPatchProduction,
+  alertDeleteProduction,
 } from "../components/alerts/sweet";
 
 // quede aca en el alert
 interface ListProps {
-  filtered: PriceGrainInterface[];
+  filtered: ProductionInterface[];
   allRotations: RotationInterface[];
+  allLots: LotInterface[];
 }
 
-function List({ filtered, allRotations }: ListProps) {
+function List({ filtered, allRotations, allLots }: ListProps) {
   // paginado
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentItems, setCurrentItems] = useState<PriceGrainInterface[]>([]);
+  const [currentItems, setCurrentItems] = useState<ProductionInterface[]>([]);
   const [maximum, setMaximum] = useState(1);
   const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
@@ -44,16 +45,17 @@ function List({ filtered, allRotations }: ListProps) {
 
   // handlers
   const handleEditRow = (id: number) => {
-    alertPatchPriceGrain(
+    alertPatchProduction(
       id,
-      "Precio x Grano",
+      "Produccion",
       allRotations,
+      allLots
 
     );
   };
   const handleDeleteRow = async (idLabor: number) => {
     try {
-      await alertDeleteListPrice(idLabor, "Precio x Grano");
+      await alertDeleteProduction(idLabor, "Produccion");
     } catch (error) {
       console.error(error);
     }
@@ -66,13 +68,16 @@ function List({ filtered, allRotations }: ListProps) {
           <thead className="bg-gray-50">
             <tr>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                Lote
+              </th>
+              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
                 Campaña
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Cultivo
+                Produccion x Tn
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Precio
+                Produccion Optima
               </th>
             </tr>
           </thead>
@@ -80,9 +85,10 @@ function List({ filtered, allRotations }: ListProps) {
             {currentItems && currentItems.length > 0 ? (
               currentItems.map((item: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-50">
+                  <td className="px-6 py-4">{item.idLot.businessName} - {item.idLot.establishment} - {item.idLot.lot}</td>
                   <td className="px-6 py-4">{item.campaign}</td>
-                  <td className="px-6 py-4">{item.crop}</td>
-                  <td className="px-6 py-4">{`$ ${item.price}`}</td>
+                  <td className="px-6 py-4">{`${item.productionTn}`}</td>
+                  <td className="px-6 py-4">{`${item.productionOptimum}`}</td>
                   <td className="px-6 py-4">
                     <div className="flex justify-end gap-4">
                       <button>
@@ -95,8 +101,8 @@ function List({ filtered, allRotations }: ListProps) {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            item.idPriceGrain !== undefined &&
-                            handleEditRow(item.idPriceGrain)
+                            item.idProduction !== undefined &&
+                            handleEditRow(item.idProduction)
                           }
                         >
                           <path
@@ -116,8 +122,8 @@ function List({ filtered, allRotations }: ListProps) {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            item.idPriceGrain !== undefined &&
-                            handleDeleteRow(item.idPriceGrain)
+                            item.idProduction !== undefined &&
+                            handleDeleteRow(item.idProduction)
                           }
                         >
                           <path

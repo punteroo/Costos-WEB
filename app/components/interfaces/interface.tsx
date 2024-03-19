@@ -88,3 +88,13 @@ export interface PriceGrainInterface {
     createdAt?: string
     updatedAt?: string
 }
+
+export interface ProductionInterface {
+    idProduction?: number,
+    idLot?: number,
+    campaign?: string,
+    productionTn?: number
+    productionOptimum?: number
+    createdAt?: string
+    updatedAt?: string
+}

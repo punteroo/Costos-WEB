@@ -7,6 +7,7 @@ import {
   LotInterface,
   MoneyInterface,
   PriceGrainInterface,
+  ProductionInterface,
   RotationInterface,
   SupplyInterface,
   UnitSupplyInterface,
@@ -33,6 +34,10 @@ import {
   getOneCost,
   editPriceGrain,
   deletePriceGrain,
+  deleteProduction,
+  editProduction,
+  getOneProduction,
+  getOnePriceGrain,
 } from "@/app/api/apis";
 
 const MySwal = withReactContent(Swal);
@@ -120,15 +125,19 @@ export const alertPatchLot = async (id: number, param1: string) => {
           const latitude = Number(latitudeInput?.value);
           const length = Number(lengthInput?.value);
           const condition = conditionInput?.value;
-          const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
 
+          const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+          const finalSurface= Number(surface.toFixed(2))
+          const finalLatitude= Number(latitude.toFixed(2))
+          const finalLength= Number(length.toFixed(2))
+          
           const lotObject = {
             businessName,
             establishment,
             lot,
-            surface,
-            latitude,
-            length,
+            surface:finalSurface,
+            latitude:finalLatitude,
+            length:finalLength,
             condition,
             updatedAt: currentDate,
           };
@@ -569,11 +578,12 @@ export const alertPatchLabor = async (
           const dose = Number(doseInput?.value);
 
           const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+          const finalDose= Number(dose.toFixed(2))
 
           const object: LaborInterface = {
             date: date || "",
             commercialBrand,
-            dose,
+            dose:finalDose,
             idUnit,
             idRotation,
             idLot,
@@ -738,11 +748,12 @@ export const alertPatchListPrice = async (
           const inputTransform5 = Number(input5?.value);
 
           const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+          const finalPrice= Number(inputTransform3.toFixed(2))
 
           const object: ListPriceInterface = {
             commercialBrand: inputTransform1,
             campaign: inputTransform2,
-            price: inputTransform3,
+            price: finalPrice,
             idMoney: inputTransform4,
             idUnit: inputTransform5,
             updatedAt: currentDate,
@@ -894,13 +905,16 @@ export const alertPatchCost = async (
           const inputTransform5 = Number(input5?.value);
 
           const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+          const finalPrice= Number(inputTransform4.toFixed(2))
+          const finalQuantity= Number(inputTransform5.toFixed(2))
+
 
           const object: CostInterface = {
             date: inputTransform1 || "",
             idSupply: inputTransform2,
             idMoney: inputTransform3,
-            price: inputTransform4,
-            quantity: inputTransform5,
+            price: finalPrice,
+            quantity: finalQuantity,
             updatedAt: currentDate,
           };
 
@@ -972,7 +986,7 @@ export const alertPatchPriceGrain = async (
 
 ) => {
   try {
-    const response = await getOneListPrice(id);
+    const response = await getOnePriceGrain(id);
     const objectResponse: PriceGrainInterface | undefined = response?.data;
 
 
@@ -1033,14 +1047,15 @@ export const alertPatchPriceGrain = async (
           const inputTransform1 = input1?.value;
           const inputTransform2 = input2?.value;
           const inputTransform3 = Number(input3?.value);
-;
 
           const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+          const finalPrice= Number(inputTransform3.toFixed(2))
+
 
           const object: PriceGrainInterface = {
             campaign: inputTransform1,
             crop: inputTransform2,
-            price: inputTransform3,
+            price: finalPrice,
             updatedAt: currentDate,
           };
 
@@ -1082,6 +1097,163 @@ export const alertDeletePriceGrain = async (id: number, param1: string) => {
       if (result.isConfirmed) {
         try {
           const resultDelete = await deletePriceGrain(id);
+          if (resultDelete?.status === 200) {
+            Swal.fire({
+              title: "Eliminado",
+              text: `El ${param1} ha sido eliminado`,
+              icon: "success",
+            });
+          }
+        } catch (error) {
+          throw new Error(`Error al intentar eliminar el ${param1}: ${error}`);
+        }
+      }
+    });
+  } catch (error) {
+    throw new Error(`Error en el método de eliminar ${param1}: ${error}`);
+  }
+};
+
+
+
+/* PRODUCCION */
+
+// Editar produccion
+
+export const alertPatchProduction = async (
+  id: number,
+  param1: string,
+  allRotations: RotationInterface[],
+  allLots: LotInterface[],
+
+) => {
+  try {
+    const response = await getOneProduction(id);
+    const objectResponse: ProductionInterface | undefined = response?.data;
+    let arrayCampaigns = []
+
+    if (allRotations.length > 0) {
+      arrayCampaigns = Array.from(new Set(allRotations.map((value:any) => value.campaign)));
+    }
+
+
+    if (objectResponse) {
+      Swal.fire({
+        title: "Editar Produccion",
+        html: `
+
+        <label for="idLot">Lote</label>   
+        <select id="idLot" class="inputEdit">
+          ${allLots
+            ?.map(
+              (option) => `
+            <option value="${option.idLot}" 
+            ${objectResponse.idLot === option.idLot ? "selected" : ""}>
+            ${option.businessName} - ${option.establishment} - ${option.lot}
+            </option>`
+            )
+            .join("")}
+        </select>
+
+
+        <label for="campaign">Campaña</label>   
+        <select id="campaign" class="inputEdit">
+          ${arrayCampaigns
+            ?.map(
+              (option) => `
+            <option value="${option}" 
+            ${objectResponse === option ? "selected" : ""}>
+              ${option} 
+            </option>`
+            )
+            .join("")}
+        </select>
+        
+        
+        <label for="productionTn">Produccion x Tn</label>
+        <input type="number" id="productionTn" class="inputEdit" value="${
+          objectResponse.productionTn
+        }">
+
+        <label for="productionOptimum">Produccion x Tn</label>
+        <input type="number" id="productionOptimum" class="inputEdit" value="${
+          objectResponse.productionOptimum
+        }">
+
+
+        `,
+        showCancelButton: true,
+        confirmButtonText: "Guardar Cambios",
+        cancelButtonText: "Cancelar",
+        preConfirm: async () => {
+          // Obtén los valores de los campos de manera segura
+          const input1 =
+            Swal.getPopup()?.querySelector<HTMLInputElement>("#idLot");
+          const input2 =
+            Swal.getPopup()?.querySelector<HTMLInputElement>("#campaign");
+          const input3 =
+            Swal.getPopup()?.querySelector<HTMLInputElement>("#productionTn");
+            const input4 =
+            Swal.getPopup()?.querySelector<HTMLInputElement>("#productionOptimum");
+
+
+
+          const inputTransform1 = Number(input1?.value);
+          const inputTransform2 = input2?.value;
+          const inputTransform3 = Number(input3?.value);
+          const inputTransform4 = Number(input4?.value);
+
+          const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+          const finalProductionTn= Number(inputTransform3.toFixed(2))
+          const finalProductionOptimum= Number(inputTransform4.toFixed(2))
+
+
+          const object: ProductionInterface = {
+            idLot: inputTransform1,
+            campaign: inputTransform2,
+            productionTn: finalProductionTn,
+            productionOptimum: finalProductionOptimum,
+            updatedAt: currentDate,
+          };
+
+          const finalPatch = Object.fromEntries(
+            Object.entries(object).filter(([key, value]) => value !== "")
+          );
+
+          try {
+            const result = await editProduction(id, finalPatch as ProductionInterface);
+
+            alertAddOk(`El ${param1} se modifico con exito`);
+
+            return result?.data;
+          } catch (error) {
+            console.error(
+              `error al intentar realizar el patch en ${param1}: ${error}`
+            );
+          }
+        },
+      });
+    }
+  } catch (error) {
+    throw new Error(`Error en el método de patch ${param1}: ${error}`);
+  }
+};
+
+// Eliminar un costo 
+export const alertDeleteProduction = async (id: number, param1: string) => {
+  try {
+    await Swal.fire({
+      title: "¿Confirma la Eliminación?",
+      text: "Este proceso no tiene retorno",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DC143C",
+      cancelButtonColor: "#DCDCDC",
+      confirmButtonText: "Eliminar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const resultDelete = await deleteProduction(id);
           if (resultDelete?.status === 200) {
             Swal.fire({
               title: "Eliminado",

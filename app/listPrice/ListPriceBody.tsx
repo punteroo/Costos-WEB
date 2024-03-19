@@ -164,7 +164,7 @@ export default function ListPriceBody() {
   return (
     <>
       <div className="space-y-4 px-6">
-        <div className="card grid grid-cols-4 gap-4 mt-4">
+        <div className="card grid grid-cols-3 gap-4 mt-4">
           {/* Marca Comercial */}
           <select
             onInput={(e) =>
