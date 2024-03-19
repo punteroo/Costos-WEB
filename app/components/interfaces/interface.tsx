@@ -24,10 +24,11 @@ export interface SupplyInterface {
 
 
 export interface CostInterface {
-    money: string,
+    date: string,
+    idSupply: number,
+    idMoney: number,
     price: number,
-    cant: number,
-    idSupply: number
+    quantity: number,
     createdAt?: string
     updatedAt?: string
 }

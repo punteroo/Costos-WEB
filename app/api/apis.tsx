@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import {
+  CostInterface,
   LaborInterface,
   ListPriceInterface,
   LotInterface,
@@ -371,6 +372,76 @@ export const deleteListPrice = async (id: number) => {
     } else {
       // Manejar otros tipos de errores
       console.error("Error al eliminar insumo de la lista:", error);
+    }
+  }
+};
+
+
+// COSTO
+export const postCost = async (object: CostInterface) => {
+  try {
+    const result = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_COST}${process.env.NEXT_PUBLIC_COST_POST}`,
+      object
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al cargar el costo:", error);
+  }
+};
+
+export const editCost = async (id: number, object: CostInterface) => {
+  try {
+    const result = await axios.patch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_COST}${process.env.NEXT_PUBLIC_COST_EDIT}/${id}`,
+      object
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al editar el costo:", error);
+  }
+};
+
+export const getAllCosts = async () => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_COST}${process.env.NEXT_PUBLIC_COST_GETALL}`
+    );
+    console.log('resultado de costos: ', result)
+    return result;
+  } catch (error) {
+    console.error("Error al obtener el costo:", error);
+  }
+};
+
+export const getOneCost = async (idLabor: number) => {
+  try {
+    const result = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_COST}${process.env.NEXT_PUBLIC_COST_GETONE}/${idLabor}`
+    );
+    return result;
+  } catch (error) {
+    console.error("Error al obtener el costo:", error);
+  }
+};
+
+export const deleteCost = async (id: number) => {
+  try {
+    const result = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BASE_URL}${process.env.NEXT_PUBLIC_BASE_COST}${process.env.NEXT_PUBLIC_COST_DELETE}/${id}`
+    );
+    return result;
+  } catch (error: any) {
+    if (
+      error instanceof AxiosError &&
+      error.response?.data.message ===
+        "Recurso no encontrado debido a una violación de clave foránea"
+    ) {
+      // Manejar errores de Axios
+      alertRemoveError("El recurso no se puede eliminar por datos vinculados");
+    } else {
+      // Manejar otros tipos de errores
+      console.error("Error al eliminar el costo:", error);
     }
   }
 };

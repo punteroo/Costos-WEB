@@ -1,6 +1,7 @@
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import {
+  CostInterface,
   LaborInterface,
   ListPriceInterface,
   LotInterface,
@@ -26,6 +27,9 @@ import {
   getOneListPrice,
   editListPrice,
   deleteListPrice,
+  editCost,
+  deleteCost,
+  getOneCost,
 } from "@/app/api/apis";
 
 const MySwal = withReactContent(Swal);
@@ -508,7 +512,7 @@ export const alertPatchLabor = async (
         </select>
         
         <label for="date">Fecha</label>
-        <input type="Date" id="date" class="inputEdit" value="${
+        <input type="string" id="date" class="inputEdit" value="${
           objetoLabor.date
         }">
         <label for="commercialBrand">Marca Comercial</label>
@@ -556,7 +560,7 @@ export const alertPatchLabor = async (
           const idLot = Number(lotInput?.value);
           const idRotation = Number(rotationInput?.value);
           const date = dateInput?.value;
-          const formattedDate = moment(date).format("DD/MM/YYYY HH:mm:ss");
+          // const formattedDate = moment(date).format("DD/MM/YYYY HH:mm:ss");
           const commercialBrand = commercialBrandInput?.value;
           const idUnit = Number(unitInput?.value);
           const dose = Number(doseInput?.value);
@@ -564,7 +568,7 @@ export const alertPatchLabor = async (
           const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
 
           const object: LaborInterface = {
-            date: formattedDate,
+            date: date || "",
             commercialBrand,
             dose,
             idUnit,
@@ -779,6 +783,162 @@ export const alertDeleteListPrice = async (id: number, param1: string) => {
       if (result.isConfirmed) {
         try {
           const resultDelete = await deleteListPrice(id);
+          if (resultDelete?.status === 200) {
+            Swal.fire({
+              title: "Eliminado",
+              text: `El ${param1} ha sido eliminado`,
+              icon: "success",
+            });
+          }
+        } catch (error) {
+          throw new Error(`Error al intentar eliminar el ${param1}: ${error}`);
+        }
+      }
+    });
+  } catch (error) {
+    throw new Error(`Error en el método de eliminar ${param1}: ${error}`);
+  }
+};
+
+
+
+/* COSTOS */
+
+// Editar un costo
+
+export const alertPatchCost = async (
+  id: number,
+  param1: string,
+  allSupplies: SupplyInterface[],
+  allMoney: MoneyInterface[],
+
+) => {
+  try {
+    const response = await getOneCost(id);
+    const objectResponse: CostInterface | undefined = response?.data;
+
+
+    if (objectResponse) {
+      Swal.fire({
+        title: "Editar Objeto",
+        html: `
+
+        <label for="date">Fecha</label>
+        <input type="string" id="date" class="inputEdit" value="${
+          objectResponse.date
+        }">
+
+        <label for="idSupply">Insumo</label>   
+        <select id="idSupply" class="inputEdit">
+          ${allSupplies
+            ?.map(
+              (option) => `
+            <option value="${option.idSupply}" 
+            ${objectResponse.idSupply === Number(option.idSupply) ? "selected" : ""}>
+              ${option.category} - ${option.subCategory} - ${option.family}
+            </option>`
+            )
+            .join("")}
+        </select>
+        
+
+        <label for="money">CampMonedaaña</label>   
+        <select id="money" class="inputEdit">
+        ${allMoney
+          ?.map(
+            (option) => `
+          <option value="${option.idMoney}" ${
+              objectResponse.idMoney === option.idMoney ? "selected" : ""
+            }>${option.description}</option>
+        `
+          )
+          .join("")}
+        </select>
+        
+        <label for="price">Precio</label>
+        <input type="number" id="price" class="inputEdit" value="${
+          objectResponse.price
+        }">
+
+
+        <label for="quantity">Cantidad</label>
+        <input type="number" id="quantity" class="inputEdit" value="${
+          objectResponse.quantity
+        }">
+  
+        `,
+        showCancelButton: true,
+        confirmButtonText: "Guardar Cambios",
+        cancelButtonText: "Cancelar",
+        preConfirm: async () => {
+          // Obtén los valores de los campos de manera segura
+          const input1 =
+            Swal.getPopup()?.querySelector<HTMLInputElement>("#date");
+          const input2 =
+            Swal.getPopup()?.querySelector<HTMLInputElement>("#idSupply");
+          const input3 =
+            Swal.getPopup()?.querySelector<HTMLInputElement>("#money");
+          const input4 =
+            Swal.getPopup()?.querySelector<HTMLInputElement>("#price");
+          const input5 =
+            Swal.getPopup()?.querySelector<HTMLInputElement>("#quantity");
+
+
+          const inputTransform1 = input1?.value;
+          const inputTransform2 = Number(input2?.value);
+          const inputTransform3 = Number(input3?.value);
+          const inputTransform4 = Number(input4?.value);
+          const inputTransform5 = Number(input5?.value);
+
+          const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+
+          const object: CostInterface = {
+            date: inputTransform1 || "",
+            idSupply: inputTransform2,
+            idMoney: inputTransform3,
+            price: inputTransform4,
+            quantity: inputTransform5,
+            updatedAt: currentDate,
+          };
+
+          const finalPatch = Object.fromEntries(
+            Object.entries(object).filter(([key, value]) => value !== "")
+          );
+
+          try {
+            const result = await editCost(id, finalPatch as CostInterface);
+
+            alertAddOk(`El ${param1} se modifico con exito`);
+
+            return result?.data;
+          } catch (error) {
+            console.error(
+              `error al intentar realizar el patch en ${param1}: ${error}`
+            );
+          }
+        },
+      });
+    }
+  } catch (error) {
+    throw new Error(`Error en el método de patch ${param1}: ${error}`);
+  }
+};
+
+// Eliminar un insumo dentro de la lista de precios
+export const alertDeleteCost = async (id: number, param1: string) => {
+  try {
+    await Swal.fire({
+      title: "¿Confirma la Eliminación?",
+      text: "Este proceso no tiene retorno",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DC143C",
+      cancelButtonColor: "#DCDCDC",
+      confirmButtonText: "Eliminar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const resultDelete = await deleteCost(id);
           if (resultDelete?.status === 200) {
             Swal.fire({
               title: "Eliminado",
