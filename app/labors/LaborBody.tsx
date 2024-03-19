@@ -123,6 +123,7 @@ export default function LaborBody() {
   };
 
   const handleSetDose = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(Number(e.target.value))
     setDose(Number(e.target.value));
   };
 
@@ -142,13 +143,15 @@ export default function LaborBody() {
     e.preventDefault();
 
     const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+    const finalDose = Number(dose.toFixed(2))
+
 
     const Object: LaborInterface = {
       idLot: lot,
       idRotation: rotation,
       date:dateFormated,
       commercialBrand,
-      dose,
+      dose: finalDose,
       idUnit: unit,
       createdAt: currentDate,
       updatedAt: currentDate,

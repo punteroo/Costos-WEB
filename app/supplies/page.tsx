@@ -7,7 +7,7 @@ export const fetchCache = "force-no-store";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export default function Lot() {
+export default function Supply() {
   return (
     <Layout>
       <SectionTitle title="Insumos" icon={<SupplyTitleIcon />} />

@@ -51,14 +51,17 @@ export default function LotsBody() {
     e.preventDefault();
 
     const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+    const finalSurface= Number(surface.toFixed(2))
+    const finalLatitude= Number(latitude.toFixed(2))
+    const finalLength= Number(length.toFixed(2))
 
     const lotObject: LotInterface = {
       businessName,
       establishment,
       lot,
-      surface,
-      latitude,
-      length,
+      surface:finalSurface,
+      latitude:finalLatitude,
+      length:finalLength,
       condition,
       createdAt: currentDate,
       updatedAt: currentDate,

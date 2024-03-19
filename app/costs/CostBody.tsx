@@ -101,13 +101,16 @@ export default function CostBody() {
     e.preventDefault();
 
     const currentDate = moment().format("DD/MM/YYYY HH:mm:ss"); // Obtener la fecha actual formateada
+    const finalPrice = Number(price.toFixed(2))
+    const finalQuantity = Number(quantity.toFixed(2))
+
 
     const Object: CostInterface = {
       date: dateFormated,
       idSupply: supply,
       idMoney: money,
-      price,
-      quantity,
+      price:finalPrice,
+      quantity:finalQuantity,
       createdAt: currentDate,
       updatedAt: currentDate,
     };
@@ -117,7 +120,7 @@ export default function CostBody() {
 
       // Verifica si result es undefined antes de acceder a sus propiedades
       if (result && result.status === 201) {
-        alertAddOk("Cost cargada con éxito");
+        alertAddOk("Costo cargado con éxito");
         setDateFormated(dateFormated)
         setSupply(0)
         setMoney(0)
@@ -131,7 +134,7 @@ export default function CostBody() {
   return (
     <>
       <div className="space-y-4 px-6">
-        <div className="card grid grid-cols-4 gap-4 mt-4">
+        <div className="card grid grid-cols-3 gap-4 mt-4">
 
               {/* Fecha */}
               <div style={{ position: "relative", display: "inline-block" }}>

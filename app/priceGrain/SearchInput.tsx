@@ -17,7 +17,6 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
   const [filteredPriceGrain, setFilteredPriceGrain] = useState<PriceGrainInterface[]>([]);
   const [searchTerm, setSearchTerm] = useState(""); // buscador
-
   // Obtener los datos iniciales al montar el componente
   useEffect(() => {
     const fetchData = async () => {

@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import SectionTitle from "../components/section-title";
 import PriceGrainBody from "./priceGrainsBody";
 
-export default function Cost() {
+export default function PriceGrain() {
   return (
     <Layout>
       <SectionTitle title="Precio x Grano" icon={<PriceGrainTitleIcon />} />

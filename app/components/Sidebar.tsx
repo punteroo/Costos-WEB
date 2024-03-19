@@ -36,9 +36,9 @@ const menuItems: MenuItem[] = [
     id: 8,
     label: "P. x Grano",
     icon: faHandHoldingDollar,
-    link: "/priceGrains",
+    link: "/priceGrain",
   },
-  { id: 9, label: "Produccion", icon: faSunPlantWilt, link: "/productions" },
+  { id: 9, label: "Produccion", icon: faSunPlantWilt, link: "/production" },
 ];
 
 export default function Sidebar() {
