@@ -1,89 +1,78 @@
 import React, { useState, useEffect } from "react";
-import { CostInterface, SupplyInterface, MoneyInterface } from "../components/interfaces/interface";
-import {  alertDeleteCost, alertDeleteLabor,  alertPatchCost,  alertPatchLabor,  } from "../components/alerts/sweet";
-
+import {
+  RotationInterface,
+  PriceGrainInterface,
+} from "../components/interfaces/interface";
+import {
+  alertPatchPriceGrain,
+  alertDeletePriceGrain,
+  alertDeleteListPrice,
+} from "../components/alerts/sweet";
 
 // quede aca en el alert
 interface ListProps {
-  filtered: CostInterface[];
-  allSupplies: SupplyInterface[];
-  allMoney: MoneyInterface[];
+  filtered: PriceGrainInterface[];
+  allRotations: RotationInterface[];
 }
 
+function List({ filtered, allRotations }: ListProps) {
+  // paginado
+  const itemsPerPage = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentItems, setCurrentItems] = useState<PriceGrainInterface[]>([]);
+  const [maximum, setMaximum] = useState(1);
+  const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
-function List({ filtered, allSupplies, allMoney }: ListProps) {
-  
-  
- // paginado
-const itemsPerPage = 4;
-const [currentPage, setCurrentPage] = useState(1);
-const [currentItems, setCurrentItems] = useState<CostInterface[]>([]);
-const [maximum, setMaximum] = useState(1);
-const [pageNumbers, setPageNumbers] = useState<number[]>([]);
+  useEffect(() => {
+    if (filtered) {
+      // Calcula el índice de inicio y fin de la página actual
+      const indexOfLastItem = currentPage * itemsPerPage;
+      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+      const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
+      setCurrentItems(currentItems);
 
-useEffect(() => {
-  if (filtered) {
-    // Calcula el índice de inicio y fin de la página actual
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = filtered.slice(indexOfFirstItem, indexOfLastItem);
-    setCurrentItems(currentItems);
+      const newPageNumbers = [];
+      for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
+        newPageNumbers.push(i);
+      }
+      setPageNumbers(newPageNumbers);
 
-  
-    const newPageNumbers = [];
-    for (let i = 1; i <= Math.ceil(filtered.length / itemsPerPage); i++) {
-      newPageNumbers.push(i);
+      const maximum = Math.max(...newPageNumbers, 1);
+      setMaximum(maximum);
     }
-    setPageNumbers(newPageNumbers);
-  
-    const maximum = Math.max(...newPageNumbers, 1);
-    setMaximum(maximum);
-  }
-}, [currentPage, filtered, itemsPerPage]);
-
+  }, [currentPage, filtered, itemsPerPage]);
 
   // handlers
-  const handleEditRow = (idCost: number) => {
-    alertPatchCost(
-      idCost,
-      "Costo",
-      allSupplies,
-      allMoney,
-      
+  const handleEditRow = (id: number) => {
+    alertPatchPriceGrain(
+      id,
+      "Precio x Grano",
+      allRotations,
+
     );
   };
-  const handleDeleteRow = async (idCost: number) => {
+  const handleDeleteRow = async (idLabor: number) => {
     try {
-      await alertDeleteCost(
-        idCost,
-        "Costo"
-      );
+      await alertDeleteListPrice(idLabor, "Precio x Grano");
     } catch (error) {
       console.error(error);
     }
   };
 
-  (currentItems)
   return (
     <>
       <div className="overflow-auto rounded-lg border border-gray-200 shadow-md my-5 md:h-80">
         <table className="w-full border-collapse bg-white text-left text-xs lg:text-sm text-gray-500">
           <thead className="bg-gray-50">
             <tr>
-            <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Fecha
+              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
+                Campaña
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Insumo
-              </th>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Moneda
+                Cultivo
               </th>
               <th scope="col" className="px-6 py-4 font-medium text-gray-900">
                 Precio
-              </th>
-              <th scope="col" className="px-6 py-4 font-medium text-gray-900">
-                Cantidad
               </th>
             </tr>
           </thead>
@@ -91,11 +80,9 @@ useEffect(() => {
             {currentItems && currentItems.length > 0 ? (
               currentItems.map((item: any, index: number) => (
                 <tr key={index} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">{item.date}</td>
-                  <td className="px-6 py-4">{item.idSupply.category} - {item.idSupply.subCategory} - {item.idSupply.family}</td>
-                  <td className="px-6 py-4">{item.idMoney.description}</td>
-                  <td className="px-6 py-4">{item.price}</td>
-                  <td className="px-6 py-4">{item.quantity}</td>
+                  <td className="px-6 py-4">{item.campaign}</td>
+                  <td className="px-6 py-4">{item.crop}</td>
+                  <td className="px-6 py-4">{`$ ${item.price}`}</td>
                   <td className="px-6 py-4">
                     <div className="flex justify-end gap-4">
                       <button>
@@ -108,8 +95,8 @@ useEffect(() => {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            item.idCost !== undefined &&
-                            handleEditRow(item.idCost )
+                            item.idPriceGrain !== undefined &&
+                            handleEditRow(item.idPriceGrain)
                           }
                         >
                           <path
@@ -129,8 +116,8 @@ useEffect(() => {
                           className="h-6 w-6"
                           x-tooltip="tooltip"
                           onClick={() =>
-                            item.idCost !== undefined &&
-                            handleDeleteRow(item.idCost)
+                            item.idPriceGrain !== undefined &&
+                            handleDeleteRow(item.idPriceGrain)
                           }
                         >
                           <path
@@ -154,8 +141,8 @@ useEffect(() => {
           </tbody>
         </table>
       </div>
-            {/* Botones de paginación */}
-            <div className="flex justify-center mt-4">
+      {/* Botones de paginación */}
+      <div className="flex justify-center mt-4">
         <div
           className="
            inline-flex
@@ -229,8 +216,6 @@ useEffect(() => {
       </div>
     </>
   );
-  
-  
 }
 
 export default List;

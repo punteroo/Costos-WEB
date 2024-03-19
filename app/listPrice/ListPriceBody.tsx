@@ -122,7 +122,7 @@ export default function ListPriceBody() {
     );
     if (found) {
       const { idMoney } = found;
-      console.log(idMoney)
+      (idMoney)
       setMoney(Number(idMoney));
     } else {
       throw new Error("Moneda no encontrada");

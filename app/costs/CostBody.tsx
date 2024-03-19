@@ -62,7 +62,7 @@ export default function CostBody() {
   };
 
   const handleSetSupply = (value: string) => {
-    console.log(value)
+    (value)
     const found: SupplyInterface | undefined = AllSupplies.find(
       (supply: SupplyInterface) => supply.idSupply === Number(value)
     );
@@ -75,7 +75,7 @@ export default function CostBody() {
   };
 
   const handleSetMoney = (value: string) => {
-    console.log(value)
+    (value)
     const found: MoneyInterface | undefined = AllMoney.find(
       (money: MoneyInterface) => money.idMoney === Number(value)
     );
@@ -88,11 +88,11 @@ export default function CostBody() {
   };
 
   const handleSetPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value)
+    (e.target.value)
     setPrice(Number(e.target.value))
   }
   const handleSetquantity = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value)
+    (e.target.value)
     setQuantity(Number(e.target.value))
   }
 

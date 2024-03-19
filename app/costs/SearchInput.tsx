@@ -9,7 +9,7 @@ interface SearchInputProps {
 }
 
 export const SearchInput: React.FC<SearchInputProps> = ({ allSupplies, allMoney, allCosts }) => {
-  console.log(allCosts)
+  (allCosts)
   const [filteredCosts, setFilteredCosts] = useState<CostInterface[]>([]);
   const [searchTerm, setSearchTerm] = useState(""); // buscador
 
