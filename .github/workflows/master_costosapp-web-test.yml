@@ -26,6 +26,11 @@ jobs:
           npm install
           npm run build
 
+      - name: Copy static Next assets before zipping
+        run: |
+          cp -r public .next/standalone
+          cp -r .next/static .next/standalone/.next
+
       - name: Zip artifact for deployment
         run: zip -r release.zip * .[^.]*
 
